@@ -1,5 +1,5 @@
 {
-	"name": "ecdc",
+	"name": "ecdc_cases_deaths_raw",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "DataLakeStorage_sakimo2024",
@@ -13,6 +13,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": "cases_deaths.csv",
 				"folderPath": "ecdc",
 				"fileSystem": "raw-files-covid"
 			},
