@@ -1,0 +1,77 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "adf-mamo-2023"
+		},
+		"Blob_Storage_bstorageeurostat_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'Blob_Storage_bstorageeurostat'"
+		},
+		"DataLakeStorage_sakimo2024_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'DataLakeStorage_sakimo2024'"
+		},
+		"AzureDatabricks1_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "0327-110020-m63kpskf"
+		},
+		"DataLakeStorage_sakimo2024_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://sakimo2024.dfs.core.windows.net/"
+		},
+		"event_trigger_1_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/47f66aa8-8d49-4acd-85a1-3370d33b0508/resourceGroups/rgmamor/providers/Microsoft.Storage/storageAccounts/bstorageeurostat"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "adf-mamo-2023_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"Blob_Storage_bstorageeurostat_connectionString": {
+						"value": "[parameters('Blob_Storage_bstorageeurostat_connectionString')]"
+					},
+					"DataLakeStorage_sakimo2024_accountKey": {
+						"value": "[parameters('DataLakeStorage_sakimo2024_accountKey')]"
+					},
+					"AzureDatabricks1_properties_typeProperties_existingClusterId": {
+						"value": "[parameters('AzureDatabricks1_properties_typeProperties_existingClusterId')]"
+					},
+					"DataLakeStorage_sakimo2024_properties_typeProperties_url": {
+						"value": "[parameters('DataLakeStorage_sakimo2024_properties_typeProperties_url')]"
+					},
+					"event_trigger_1_properties_typeProperties_scope": {
+						"value": "[parameters('event_trigger_1_properties_typeProperties_scope')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
