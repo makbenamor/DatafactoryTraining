@@ -20,6 +20,15 @@
 		"event_trigger_1_properties_typeProperties_scope": {
 			"value": "/subscriptions/47f66aa8-8d49-4acd-85a1-3370d33b0508/resourceGroups/rgmamor/providers/Microsoft.Storage/storageAccounts/bstorageeurostat"
 		},
+		"Http_Ecdc_properties_typeProperties_url": {
+			"value": "https://raw.githubusercontent.com"
+		},
+		"scheduled1_properties_Ingest_raw_from_HTTP_to_ADLS_parameters_sinkFileName": {
+			"value": "hospital_admissions.csv"
+		},
+		"scheduled1_properties_Ingest_raw_from_HTTP_to_ADLS_parameters_sourceRelativeURL": {
+			"value": "/cloudboxacademy/covid19/main/raw/main/ecdc_data/hospital_admissions.csv"
+		},
 		"containerUri": {
 			"value": ""
 		},
