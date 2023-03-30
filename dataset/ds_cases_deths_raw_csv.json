@@ -1,0 +1,25 @@
+{
+	"name": "ds_cases_deths_raw_csv",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Http_Ecdc",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Covid_datasets"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": "/covid19/blob/main/raw/main/ecdc_data/cases_deaths.csv"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}

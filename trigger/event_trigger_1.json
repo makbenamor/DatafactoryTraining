@@ -6,7 +6,7 @@
 		"pipelines": [
 			{
 				"pipelineReference": {
-					"referenceName": "copy_from_SA_to_ADLS_validation",
+					"referenceName": "Ingest_raw_from_SA_to_ADLS",
 					"type": "PipelineReference"
 				}
 			}

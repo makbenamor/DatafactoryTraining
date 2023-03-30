@@ -1,5 +1,5 @@
 {
-	"name": "Ingest_raw_from_SA_to_ADLS",
+	"name": "Ingest_raw_from_HTTP_to_ADLS",
 	"properties": {
 		"description": "raw files from Sa to ADLS",
 		"activities": [
@@ -10,12 +10,11 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "source_Raw_data_blobst",
+						"referenceName": "ecdc",
 						"type": "DatasetReference"
 					},
 					"timeout": "0.00:00:30",
-					"sleep": 15,
-					"minimumSize": 10
+					"sleep": 15
 				}
 			},
 			{
