@@ -5,6 +5,11 @@
 			"referenceName": "DataLakeStorage_sakimo2024",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"FileName": {
+				"type": "string"
+			}
+		},
 		"folder": {
 			"name": "Covid_datasets"
 		},
@@ -13,7 +18,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "cases_deaths.csv",
+				"fileName": {
+					"value": "@dataset().FileName",
+					"type": "Expression"
+				},
 				"folderPath": "ecdc",
 				"fileSystem": "raw-files-covid"
 			},

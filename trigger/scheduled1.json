@@ -1,0 +1,28 @@
+{
+	"name": "scheduled1",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "Ingest_raw_from_HTTP_to_ADLS",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"sinkFileName": "hospital_admissions.csv",
+					"sourceRelativeURL": "/cloudboxacademy/covid19/main/raw/main/ecdc_data/hospital_admissions.csv"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2023-03-30T23:45:00Z",
+				"timeZone": "UTC"
+			}
+		}
+	}
+}

@@ -5,6 +5,11 @@
 			"referenceName": "Http_Ecdc",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"RelativeURL": {
+				"type": "string"
+			}
+		},
 		"folder": {
 			"name": "Covid_datasets"
 		},
@@ -13,13 +18,21 @@
 		"typeProperties": {
 			"location": {
 				"type": "HttpServerLocation",
-				"relativeUrl": "cloudboxacademy/covid19/blob/main/raw/main/ecdc_data/cases_deaths.csv"
+				"relativeUrl": {
+					"value": "@dataset().RelativeURL",
+					"type": "Expression"
+				}
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "<!DOCTYPE html>",
+				"type": "String"
+			}
+		]
 	}
 }

@@ -4,7 +4,7 @@
 		"description": "raw files from Sa to ADLS",
 		"activities": [
 			{
-				"name": "Copy data1",
+				"name": "Ingest ECDC Data",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -50,17 +50,37 @@
 				"inputs": [
 					{
 						"referenceName": "http_cases_deaths_raw_csv",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"RelativeURL": {
+								"value": "@pipeline().parameters.sourceRelativeURL",
+								"type": "Expression"
+							}
+						}
 					}
 				],
 				"outputs": [
 					{
 						"referenceName": "dl_ecdc_cases_deaths_raw",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"FileName": {
+								"value": "@pipeline().parameters.sinkFileName",
+								"type": "Expression"
+							}
+						}
 					}
 				]
 			}
 		],
+		"parameters": {
+			"sinkFileName": {
+				"type": "string"
+			},
+			"sourceRelativeURL": {
+				"type": "string"
+			}
+		},
 		"folder": {
 			"name": "Covid_udemy_course"
 		},
