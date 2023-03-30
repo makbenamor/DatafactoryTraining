@@ -1,5 +1,5 @@
 {
-	"name": "ds_cases_deths_raw_csv",
+	"name": "http_cases_deaths_raw_csv",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "Http_Ecdc",

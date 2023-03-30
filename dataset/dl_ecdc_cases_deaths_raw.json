@@ -1,5 +1,5 @@
 {
-	"name": "ecdc_cases_deaths_raw",
+	"name": "dl_ecdc_cases_deaths_raw",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "DataLakeStorage_sakimo2024",
