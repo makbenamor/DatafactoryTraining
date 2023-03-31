@@ -50,13 +50,7 @@
 				"inputs": [
 					{
 						"referenceName": "http_cases_deaths_raw_csv",
-						"type": "DatasetReference",
-						"parameters": {
-							"RelativeURL": {
-								"value": "@pipeline().parameters.sourceRelativeURL",
-								"type": "Expression"
-							}
-						}
+						"type": "DatasetReference"
 					}
 				],
 				"outputs": [

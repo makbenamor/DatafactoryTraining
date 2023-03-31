@@ -5,11 +5,6 @@
 			"referenceName": "Http_Ecdc",
 			"type": "LinkedServiceReference"
 		},
-		"parameters": {
-			"RelativeURL": {
-				"type": "string"
-			}
-		},
 		"folder": {
 			"name": "Covid_datasets"
 		},
@@ -19,7 +14,7 @@
 			"location": {
 				"type": "HttpServerLocation",
 				"relativeUrl": {
-					"value": "@dataset().RelativeURL",
+					"value": "cloudboxacademy/covid19/main/raw/main/ecdc_data",
 					"type": "Expression"
 				}
 			},
