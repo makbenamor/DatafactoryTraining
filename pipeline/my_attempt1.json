@@ -4,7 +4,7 @@
 		"description": "create a dynamic pipeline to ingest all files in the HTTP page and creates a file in the sink with file name parameter",
 		"activities": [
 			{
-				"name": "Get file names from URL",
+				"name": "Get file names from source folder",
 				"type": "GetMetadata",
 				"dependsOn": [],
 				"policy": {
@@ -21,10 +21,12 @@
 						"type": "DatasetReference"
 					},
 					"fieldList": [
+						"childItems",
 						"itemName"
 					],
 					"storeSettings": {
 						"type": "AzureBlobStorageReadSettings",
+						"recursive": true,
 						"enablePartitionDiscovery": false
 					},
 					"formatSettings": {
@@ -37,7 +39,7 @@
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Get file names from URL",
+						"activity": "Get file names from source folder",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -46,13 +48,13 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Get file names from URL').output.itemName",
+						"value": "@activity('Get file names from source folder').output.childItems",
 						"type": "Expression"
 					},
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "Ingest ECDC Data",
+							"name": "Copy data1",
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
@@ -78,7 +80,8 @@
 								"sink": {
 									"type": "DelimitedTextSink",
 									"storeSettings": {
-										"type": "AzureBlobFSWriteSettings"
+										"type": "AzureBlobFSWriteSettings",
+										"copyBehavior": "MergeFiles"
 									},
 									"formatSettings": {
 										"type": "DelimitedTextWriteSettings",
@@ -98,11 +101,11 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "my_source_Raw_data_blobst_copy1",
+									"referenceName": "myfile_source_Raw_data_blobst_copy2",
 									"type": "DatasetReference",
 									"parameters": {
 										"FileNameSource": {
-											"value": "@item().value",
+											"value": "@activity('Get file names from source folder').output.itemName",
 											"type": "Expression"
 										}
 									}
@@ -110,14 +113,8 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "dl_ecdc_cases_deaths_raw",
-									"type": "DatasetReference",
-									"parameters": {
-										"FileName": {
-											"value": "@pipeline().parameters.sinkFileName",
-											"type": "Expression"
-										}
-									}
+									"referenceName": "sink1_raw_ADLS",
+									"type": "DatasetReference"
 								}
 							]
 						}

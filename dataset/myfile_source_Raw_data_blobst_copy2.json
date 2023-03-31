@@ -1,9 +1,14 @@
 {
-	"name": "my_source_Raw_data_blobst_copy1",
+	"name": "myfile_source_Raw_data_blobst_copy2",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "Blob_Storage_bstorageeurostat",
 			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"FileNameSource": {
+				"type": "string"
+			}
 		},
 		"folder": {
 			"name": "Covid_datasets"
@@ -13,6 +18,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().FileNameSource",
+					"type": "Expression"
+				},
 				"container": "blob-ingest-raw"
 			},
 			"columnDelimiter": "\t",
