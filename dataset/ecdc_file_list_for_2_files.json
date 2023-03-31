@@ -1,0 +1,19 @@
+{
+	"name": "ecdc_file_list_for_2_files",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Blob_Storage_bstorageeurostat",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "ecdc_file_list_for_2_files.json",
+				"container": "blob-ingest-raw"
+			}
+		},
+		"schema": {}
+	}
+}

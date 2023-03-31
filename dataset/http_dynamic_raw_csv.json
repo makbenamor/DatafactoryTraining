@@ -1,12 +1,12 @@
 {
-	"name": "sink_ecdc_raw_dl",
+	"name": "http_dynamic_raw_csv",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "DataLakeStorage_sakimo2024",
+			"referenceName": "Http_Ecdc",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"FileName": {
+			"RelativeURL": {
 				"type": "string"
 			}
 		},
@@ -17,19 +17,22 @@
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobFSLocation",
-				"fileName": {
-					"value": "@dataset().FileName",
+				"type": "HttpServerLocation",
+				"relativeUrl": {
+					"value": "@dataset().RelativeURL",
 					"type": "Expression"
-				},
-				"folderPath": "ecdc",
-				"fileSystem": "raw-files-covid"
+				}
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "<!DOCTYPE html>",
+				"type": "String"
+			}
+		]
 	}
 }

@@ -61,7 +61,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "dl_ecdc_cases_deaths_raw",
+						"referenceName": "sink_ecdc_raw_dl",
 						"type": "DatasetReference",
 						"parameters": {
 							"FileName": {
