@@ -17,13 +17,15 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "http_cases_deaths_raw_csv",
+						"referenceName": "my_source_Raw_data_blobst_copy1",
 						"type": "DatasetReference"
 					},
-					"fieldList": [],
+					"fieldList": [
+						"itemName"
+					],
 					"storeSettings": {
-						"type": "HttpReadSettings",
-						"requestMethod": "GET"
+						"type": "AzureBlobStorageReadSettings",
+						"enablePartitionDiscovery": false
 					},
 					"formatSettings": {
 						"type": "DelimitedTextReadSettings"
@@ -43,6 +45,11 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
+					"items": {
+						"value": "@activity('Get file names from URL').output.itemName",
+						"type": "Expression"
+					},
+					"isSequential": true,
 					"activities": [
 						{
 							"name": "Ingest ECDC Data",
@@ -60,8 +67,9 @@
 								"source": {
 									"type": "DelimitedTextSource",
 									"storeSettings": {
-										"type": "HttpReadSettings",
-										"requestMethod": "GET"
+										"type": "AzureBlobStorageReadSettings",
+										"recursive": true,
+										"enablePartitionDiscovery": false
 									},
 									"formatSettings": {
 										"type": "DelimitedTextReadSettings"
@@ -90,8 +98,14 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "http_cases_deaths_raw_csv",
-									"type": "DatasetReference"
+									"referenceName": "my_source_Raw_data_blobst_copy1",
+									"type": "DatasetReference",
+									"parameters": {
+										"FileNameSource": {
+											"value": "@item().value",
+											"type": "Expression"
+										}
+									}
 								}
 							],
 							"outputs": [
@@ -111,14 +125,6 @@
 				}
 			}
 		],
-		"parameters": {
-			"sinkFileName": {
-				"type": "string"
-			},
-			"sourceRelativeURL": {
-				"type": "string"
-			}
-		},
 		"folder": {
 			"name": "Covid_udemy_course"
 		},

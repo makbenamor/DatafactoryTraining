@@ -1,12 +1,12 @@
 {
-	"name": "http_cases_deaths_raw_csv",
+	"name": "my_sink1_raw_ADLS_copy1",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "Http_Ecdc",
+			"referenceName": "DataLakeStorage_sakimo2024",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"RelativeURL": {
+			"FileName": {
 				"type": "string"
 			}
 		},
@@ -17,22 +17,20 @@
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
-				"type": "HttpServerLocation",
-				"relativeUrl": {
-					"value": "@dataset().RelativeURL",
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().FileName",
 					"type": "Expression"
-				}
+				},
+				"folderPath": "1.raw_files",
+				"fileSystem": "raw-files-covid"
 			},
-			"columnDelimiter": ",",
+			"columnDelimiter": "\t",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": [
-			{
-				"name": "<!DOCTYPE html>",
-				"type": "String"
-			}
-		]
-	}
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }
