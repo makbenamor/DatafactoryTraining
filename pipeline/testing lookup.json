@@ -53,14 +53,14 @@
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "Set variable1",
+							"name": "Set variable url",
 							"type": "SetVariable",
 							"dependsOn": [],
 							"userProperties": [],
 							"typeProperties": {
 								"variableName": "sourceSelectedURL",
 								"value": {
-									"value": "@item().sinkFileName",
+									"value": "@item().sourceRelativeURL",
 									"type": "Expression"
 								}
 							}
@@ -70,7 +70,13 @@
 							"type": "Copy",
 							"dependsOn": [
 								{
-									"activity": "Set variable1",
+									"activity": "Set variable url",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								},
+								{
+									"activity": "Set variable sinkFileName",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -88,9 +94,8 @@
 								"source": {
 									"type": "DelimitedTextSource",
 									"storeSettings": {
-										"type": "AzureBlobFSReadSettings",
-										"recursive": true,
-										"enablePartitionDiscovery": false
+										"type": "HttpReadSettings",
+										"requestMethod": "GET"
 									},
 									"formatSettings": {
 										"type": "DelimitedTextReadSettings"
@@ -119,10 +124,10 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "sink_ecdc_raw_dl",
+									"referenceName": "http_dynamic_raw_csv",
 									"type": "DatasetReference",
 									"parameters": {
-										"FileName": {
+										"RelativeURL": {
 											"value": "@variables('sourceSelectedURL')",
 											"type": "Expression"
 										}
@@ -131,10 +136,29 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "sink1_raw_ADLS",
-									"type": "DatasetReference"
+									"referenceName": "sink1_dynamic_raw_ADLS",
+									"type": "DatasetReference",
+									"parameters": {
+										"FileName": {
+											"value": "@variables('file_Name_in_the_sink')",
+											"type": "Expression"
+										}
+									}
 								}
 							]
+						},
+						{
+							"name": "Set variable sinkFileName",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "file_Name_in_the_sink",
+								"value": {
+									"value": "@item().sinkFileName",
+									"type": "Expression"
+								}
+							}
 						}
 					]
 				}
@@ -142,6 +166,9 @@
 		],
 		"variables": {
 			"sourceSelectedURL": {
+				"type": "String"
+			},
+			"file_Name_in_the_sink": {
 				"type": "String"
 			}
 		},

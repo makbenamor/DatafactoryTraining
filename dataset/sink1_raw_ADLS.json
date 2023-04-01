@@ -13,7 +13,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "1.raw_files",
+				"folderPath": "ecdc",
 				"fileSystem": "raw-files-covid"
 			},
 			"columnDelimiter": "\t",
