@@ -136,11 +136,11 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "sink1_dynamic_raw_ADLS",
+									"referenceName": "sink_ecdc_raw_dl",
 									"type": "DatasetReference",
 									"parameters": {
 										"FileName": {
-											"value": "@variables('file_Name_in_the_sink')",
+											"value": "@item().sinkFileName",
 											"type": "Expression"
 										}
 									}
