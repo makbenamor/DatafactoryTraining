@@ -87,6 +87,24 @@
 					},
 					"Http_Ecdc_properties_typeProperties_url": {
 						"value": "[parameters('Http_Ecdc_properties_typeProperties_url')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "adf-mamo-2023_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
 					},
 					"event_trigger_1_properties_typeProperties_scope": {
 						"value": "[parameters('event_trigger_1_properties_typeProperties_scope')]"
@@ -99,7 +117,9 @@
 					}
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'adf-mamo-2023_ArmTemplate_0')]"
+			]
 		}
 	]
 }

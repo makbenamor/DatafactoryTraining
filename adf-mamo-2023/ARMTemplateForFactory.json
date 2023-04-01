@@ -399,7 +399,7 @@
 								}
 							},
 							"dataset": {
-								"referenceName": "ecdc_file_list_for_2_files",
+								"referenceName": "ecdc_file_list_for_all_files",
 								"type": "DatasetReference",
 								"parameters": {}
 							},
@@ -426,35 +426,9 @@
 							"isSequential": true,
 							"activities": [
 								{
-									"name": "Set variable url",
-									"type": "SetVariable",
-									"dependsOn": [],
-									"userProperties": [],
-									"typeProperties": {
-										"variableName": "sourceSelectedURL",
-										"value": {
-											"value": "@item().sourceRelativeURL",
-											"type": "Expression"
-										}
-									}
-								},
-								{
 									"name": "Copy data1",
 									"type": "Copy",
-									"dependsOn": [
-										{
-											"activity": "Set variable url",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										},
-										{
-											"activity": "Set variable sinkFileName",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
+									"dependsOn": [],
 									"policy": {
 										"timeout": "0.12:00:00",
 										"retry": 0,
@@ -501,7 +475,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"RelativeURL": {
-													"value": "@variables('sourceSelectedURL')",
+													"value": "@item().sourceRelativeURL",
 													"type": "Expression"
 												}
 											}
@@ -509,24 +483,16 @@
 									],
 									"outputs": [
 										{
-											"referenceName": "sink1_raw_ADLS",
+											"referenceName": "sink_ecdc_raw_dl_copy1_dyn",
 											"type": "DatasetReference",
-											"parameters": {}
+											"parameters": {
+												"FileName": {
+													"value": "@item().SinkFileName",
+													"type": "Expression"
+												}
+											}
 										}
 									]
-								},
-								{
-									"name": "Set variable sinkFileName",
-									"type": "SetVariable",
-									"dependsOn": [],
-									"userProperties": [],
-									"typeProperties": {
-										"variableName": "file_Name_in_the_sink",
-										"value": {
-											"value": "@item().sinkFileName",
-											"type": "Expression"
-										}
-									}
 								}
 							]
 						}
@@ -536,20 +502,15 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
-				"variables": {
-					"sourceSelectedURL": {
-						"type": "String"
-					},
-					"file_Name_in_the_sink": {
-						"type": "String"
-					}
+				"folder": {
+					"name": "Covid_udemy_course"
 				},
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ecdc_file_list_for_2_files')]",
+				"[concat(variables('factoryId'), '/datasets/ecdc_file_list_for_all_files')]",
 				"[concat(variables('factoryId'), '/datasets/http_dynamic_raw_csv')]",
-				"[concat(variables('factoryId'), '/datasets/sink1_raw_ADLS')]"
+				"[concat(variables('factoryId'), '/datasets/sink_ecdc_raw_dl_copy1_dyn')]"
 			]
 		},
 		{
@@ -1143,6 +1104,429 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/Ingest_raw_from_HTTP_to_ADLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/http_dynamic_raw_csv_copy1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Http_Ecdc",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"RelativeURL": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "Dynamic_Datasets"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "HttpServerLocation",
+						"relativeUrl": {
+							"value": "@dataset().RelativeURL",
+							"type": "Expression"
+						}
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "<!DOCTYPE html>",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Http_Ecdc')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sink_ecdc_raw_dl_copy1_dyn')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DataLakeStorage_sakimo2024",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"FileName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "Dynamic_Datasets"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().FileName",
+							"type": "Expression"
+						},
+						"folderPath": "ecdc",
+						"fileSystem": "raw-files-covid"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/DataLakeStorage_sakimo2024')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ecdc_file_list_for_all_files')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Blob_Storage_bstorageeurostat",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Dynamic_Datasets"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "ecdc_file_list.json",
+						"container": "blob-ingest-raw"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"sourceBaseURL": {
+							"type": "string"
+						},
+						"sourceRelativeURL": {
+							"type": "string"
+						},
+						"sinkFileName": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Blob_Storage_bstorageeurostat')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Transform data cases_deaths')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "sink_ecdc_raw_dl_static",
+								"type": "DatasetReference"
+							},
+							"name": "casesdeathssource"
+						},
+						{
+							"dataset": {
+								"referenceName": "lookup_country",
+								"type": "DatasetReference"
+							},
+							"name": "countryLookup"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "Processed_cases_deaths",
+								"type": "DatasetReference"
+							},
+							"name": "europecasesdeaths"
+						}
+					],
+					"transformations": [
+						{
+							"name": "FilterEuropeOnly"
+						},
+						{
+							"name": "selectonlyrequired"
+						},
+						{
+							"name": "pivotcounts"
+						},
+						{
+							"name": "lookupCountry"
+						},
+						{
+							"name": "SelectforSink"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          country as string,",
+						"          country_code as string,",
+						"          continent as string,",
+						"          population as integer,",
+						"          indicator as string,",
+						"          daily_count as short,",
+						"          date as date,",
+						"          rate_14_day as double,",
+						"          source as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: true) ~> casesdeathssource",
+						"source(output(",
+						"          country as string,",
+						"          country_code_2_digit as string,",
+						"          country_code_3_digit as string,",
+						"          continent as string,",
+						"          population as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> countryLookup",
+						"casesdeathssource filter(continent <=> 'Europe' && not(isNull(country_code))) ~> FilterEuropeOnly",
+						"FilterEuropeOnly select(mapColumn(",
+						"          country,",
+						"          country_code,",
+						"          population,",
+						"          daily_count,",
+						"          reported_Date = date,",
+						"          source,",
+						"          cases_indicator = indicator",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> selectonlyrequired",
+						"selectonlyrequired pivot(groupBy(country,",
+						"          country_code,",
+						"          population,",
+						"          reported_Date),",
+						"     pivotBy(cases_indicator, ['confirmed cases', 'deaths']),",
+						"     count = sum(daily_count),",
+						"     columnNaming: '$V_$N',",
+						"     lateral: true) ~> pivotcounts",
+						"pivotcounts, countryLookup lookup(pivotcounts@country == countryLookup@country,",
+						"     multiple: false,",
+						"     pickup: 'any',",
+						"     broadcast: 'auto')~> lookupCountry",
+						"lookupCountry select(mapColumn(",
+						"          country = pivotcounts@country,",
+						"          country_code_2_digit,",
+						"          country_code_3_digit,",
+						"          population = pivotcounts@population,",
+						"          {confirmed cases_count},",
+						"          deaths_count,",
+						"          reported_Date",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectforSink",
+						"SelectforSink sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> europecasesdeaths"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/sink_ecdc_raw_dl_static')]",
+				"[concat(variables('factoryId'), '/datasets/lookup_country')]",
+				"[concat(variables('factoryId'), '/datasets/Processed_cases_deaths')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sink_ecdc_raw_dl_static')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DataLakeStorage_sakimo2024",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Covid_datasets"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "cases_deaths.csv",
+						"folderPath": "ecdc",
+						"fileSystem": "raw-files-covid"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "country",
+						"type": "String"
+					},
+					{
+						"name": "country_code",
+						"type": "String"
+					},
+					{
+						"name": "continent",
+						"type": "String"
+					},
+					{
+						"name": "population",
+						"type": "String"
+					},
+					{
+						"name": "indicator",
+						"type": "String"
+					},
+					{
+						"name": "daily_count",
+						"type": "String"
+					},
+					{
+						"name": "date",
+						"type": "String"
+					},
+					{
+						"name": "rate_14_day",
+						"type": "String"
+					},
+					{
+						"name": "source",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/DataLakeStorage_sakimo2024')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/lookup_country')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DataLakeStorage_sakimo2024",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "country_lookup.csv",
+						"fileSystem": "lookup"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/DataLakeStorage_sakimo2024')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Processed_cases_deaths')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DataLakeStorage_sakimo2024",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "processed"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/DataLakeStorage_sakimo2024')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/data_Processing_daths_cases')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Transform data cases_deaths",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"casesdeathssource": {},
+									"countryLookup": {},
+									"europecasesdeaths": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "Covid_udemy_course"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/Transform data cases_deaths')]"
 			]
 		}
 	]
