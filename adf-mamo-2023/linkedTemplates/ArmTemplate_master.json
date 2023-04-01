@@ -23,6 +23,10 @@
 			"type": "string",
 			"defaultValue": "https://sakimo2024.dfs.core.windows.net/"
 		},
+		"HTTP_dynamic_lS_ECDC_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().BaseURL}"
+		},
 		"Http_Ecdc_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://raw.githubusercontent.com"
@@ -77,6 +81,9 @@
 					},
 					"DataLakeStorage_sakimo2024_properties_typeProperties_url": {
 						"value": "[parameters('DataLakeStorage_sakimo2024_properties_typeProperties_url')]"
+					},
+					"HTTP_dynamic_lS_ECDC_properties_typeProperties_url": {
+						"value": "[parameters('HTTP_dynamic_lS_ECDC_properties_typeProperties_url')]"
 					},
 					"Http_Ecdc_properties_typeProperties_url": {
 						"value": "[parameters('Http_Ecdc_properties_typeProperties_url')]"

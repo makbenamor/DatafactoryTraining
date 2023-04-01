@@ -23,6 +23,10 @@
 			"type": "string",
 			"defaultValue": "https://sakimo2024.dfs.core.windows.net/"
 		},
+		"HTTP_dynamic_lS_ECDC_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().BaseURL}"
+		},
 		"Http_Ecdc_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://raw.githubusercontent.com"
@@ -365,6 +369,190 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/dynamic_lookup_copy1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Lookup1",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "JsonSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "JsonReadSettings"
+								}
+							},
+							"dataset": {
+								"referenceName": "ecdc_file_list_for_2_files",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Lookup1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Lookup1').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Set variable url",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "sourceSelectedURL",
+										"value": {
+											"value": "@item().sourceRelativeURL",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Copy data1",
+									"type": "Copy",
+									"dependsOn": [
+										{
+											"activity": "Set variable url",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										},
+										{
+											"activity": "Set variable sinkFileName",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "DelimitedTextSource",
+											"storeSettings": {
+												"type": "HttpReadSettings",
+												"requestMethod": "GET"
+											},
+											"formatSettings": {
+												"type": "DelimitedTextReadSettings"
+											}
+										},
+										"sink": {
+											"type": "DelimitedTextSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "DelimitedTextWriteSettings",
+												"quoteAllText": true,
+												"fileExtension": ".txt"
+											}
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "http_dynamic_raw_csv",
+											"type": "DatasetReference",
+											"parameters": {
+												"RelativeURL": {
+													"value": "@variables('sourceSelectedURL')",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "sink1_raw_ADLS",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									]
+								},
+								{
+									"name": "Set variable sinkFileName",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "file_Name_in_the_sink",
+										"value": {
+											"value": "@item().sinkFileName",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"sourceSelectedURL": {
+						"type": "String"
+					},
+					"file_Name_in_the_sink": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ecdc_file_list_for_2_files')]",
+				"[concat(variables('factoryId'), '/datasets/http_dynamic_raw_csv')]",
+				"[concat(variables('factoryId'), '/datasets/sink1_raw_ADLS')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/pl_ingest_formula1_data')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -460,14 +648,14 @@
 							"isSequential": true,
 							"activities": [
 								{
-									"name": "Set variable1",
+									"name": "Set variable url",
 									"type": "SetVariable",
 									"dependsOn": [],
 									"userProperties": [],
 									"typeProperties": {
 										"variableName": "sourceSelectedURL",
 										"value": {
-											"value": "@item().sinkFileName",
+											"value": "@item().sourceRelativeURL",
 											"type": "Expression"
 										}
 									}
@@ -477,7 +665,13 @@
 									"type": "Copy",
 									"dependsOn": [
 										{
-											"activity": "Set variable1",
+											"activity": "Set variable url",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										},
+										{
+											"activity": "Set variable sinkFileName",
 											"dependencyConditions": [
 												"Succeeded"
 											]
@@ -495,9 +689,8 @@
 										"source": {
 											"type": "DelimitedTextSource",
 											"storeSettings": {
-												"type": "AzureBlobFSReadSettings",
-												"recursive": true,
-												"enablePartitionDiscovery": false
+												"type": "HttpReadSettings",
+												"requestMethod": "GET"
 											},
 											"formatSettings": {
 												"type": "DelimitedTextReadSettings"
@@ -526,10 +719,10 @@
 									},
 									"inputs": [
 										{
-											"referenceName": "sink_ecdc_raw_dl",
+											"referenceName": "http_dynamic_raw_csv",
 											"type": "DatasetReference",
 											"parameters": {
-												"FileName": {
+												"RelativeURL": {
 													"value": "@variables('sourceSelectedURL')",
 													"type": "Expression"
 												}
@@ -538,11 +731,29 @@
 									],
 									"outputs": [
 										{
-											"referenceName": "sink1_raw_ADLS",
+											"referenceName": "sink_ecdc_raw_dl",
 											"type": "DatasetReference",
-											"parameters": {}
+											"parameters": {
+												"FileName": {
+													"value": "@item().sinkFileName",
+													"type": "Expression"
+												}
+											}
 										}
 									]
+								},
+								{
+									"name": "Set variable sinkFileName",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "file_Name_in_the_sink",
+										"value": {
+											"value": "@item().sinkFileName",
+											"type": "Expression"
+										}
+									}
 								}
 							]
 						}
@@ -555,14 +766,17 @@
 				"variables": {
 					"sourceSelectedURL": {
 						"type": "String"
+					},
+					"file_Name_in_the_sink": {
+						"type": "String"
 					}
 				},
 				"annotations": []
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ecdc_file_list_for_2_files')]",
-				"[concat(variables('factoryId'), '/datasets/sink_ecdc_raw_dl')]",
-				"[concat(variables('factoryId'), '/datasets/sink1_raw_ADLS')]"
+				"[concat(variables('factoryId'), '/datasets/http_dynamic_raw_csv')]",
+				"[concat(variables('factoryId'), '/datasets/sink_ecdc_raw_dl')]"
 			]
 		},
 		{
@@ -692,7 +906,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"folderPath": "1.raw_files",
+						"folderPath": "ecdc",
 						"fileSystem": "raw-files-covid"
 					},
 					"columnDelimiter": "\t",
@@ -829,6 +1043,26 @@
 						"type": "SecureString",
 						"value": "[parameters('DataLakeStorage_sakimo2024_accountKey')]"
 					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/HTTP_dynamic_lS_ECDC')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"parameters": {
+					"BaseURL": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "HttpServer",
+				"typeProperties": {
+					"url": "[parameters('HTTP_dynamic_lS_ECDC_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Anonymous"
 				}
 			},
 			"dependsOn": []

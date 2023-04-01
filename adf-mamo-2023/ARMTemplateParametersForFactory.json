@@ -17,6 +17,9 @@
 		"DataLakeStorage_sakimo2024_properties_typeProperties_url": {
 			"value": "https://sakimo2024.dfs.core.windows.net/"
 		},
+		"HTTP_dynamic_lS_ECDC_properties_typeProperties_url": {
+			"value": "@{linkedService().BaseURL}"
+		},
 		"Http_Ecdc_properties_typeProperties_url": {
 			"value": "https://raw.githubusercontent.com"
 		},
