@@ -27,7 +27,7 @@
 						}
 					},
 					"dataset": {
-						"referenceName": "ecdc_file_list_for_2_files",
+						"referenceName": "ecdc_file_list_for_all_files",
 						"type": "DatasetReference"
 					},
 					"firstRowOnly": false
@@ -53,35 +53,9 @@
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "Set variable url",
-							"type": "SetVariable",
-							"dependsOn": [],
-							"userProperties": [],
-							"typeProperties": {
-								"variableName": "sourceSelectedURL",
-								"value": {
-									"value": "@item().sourceRelativeURL",
-									"type": "Expression"
-								}
-							}
-						},
-						{
 							"name": "Copy data1",
 							"type": "Copy",
-							"dependsOn": [
-								{
-									"activity": "Set variable url",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								},
-								{
-									"activity": "Set variable sinkFileName",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								}
-							],
+							"dependsOn": [],
 							"policy": {
 								"timeout": "0.12:00:00",
 								"retry": 0,
@@ -128,7 +102,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"RelativeURL": {
-											"value": "@variables('sourceSelectedURL')",
+											"value": "@item().sourceRelativeURL",
 											"type": "Expression"
 										}
 									}
@@ -136,39 +110,21 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "sink1_raw_ADLS",
-									"type": "DatasetReference"
+									"referenceName": "sink_ecdc_raw_dl_copy1_dyn",
+									"type": "DatasetReference",
+									"parameters": {
+										"FileName": {
+											"value": "@item().SinkFileName",
+											"type": "Expression"
+										}
+									}
 								}
 							]
-						},
-						{
-							"name": "Set variable sinkFileName",
-							"type": "SetVariable",
-							"dependsOn": [],
-							"userProperties": [],
-							"typeProperties": {
-								"variableName": "file_Name_in_the_sink",
-								"value": {
-									"value": "@item().sinkFileName",
-									"type": "Expression"
-								}
-							}
 						}
 					]
 				}
 			}
 		],
-		"parameters": {
-			"SourceBaseURL": {
-				"type": "string"
-			},
-			"SourceRelativeURL": {
-				"type": "string"
-			},
-			"SinkFileName": {
-				"type": "string"
-			}
-		},
 		"annotations": []
 	}
 }

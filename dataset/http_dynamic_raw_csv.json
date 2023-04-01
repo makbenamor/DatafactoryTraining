@@ -2,21 +2,12 @@
 	"name": "http_dynamic_raw_csv",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "HTTP_dynamic_lS_ECDC",
-			"type": "LinkedServiceReference",
-			"parameters": {
-				"BaseURL": {
-					"value": "@dataset().BaseURL",
-					"type": "Expression"
-				}
-			}
+			"referenceName": "Http_Ecdc",
+			"type": "LinkedServiceReference"
 		},
 		"parameters": {
 			"RelativeURL": {
 				"type": "string"
-			},
-			"BaseURL": {
-				"type": "String"
 			}
 		},
 		"folder": {
