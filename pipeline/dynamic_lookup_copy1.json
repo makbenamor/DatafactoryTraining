@@ -158,12 +158,15 @@
 				}
 			}
 		],
-		"variables": {
-			"sourceSelectedURL": {
-				"type": "String"
+		"parameters": {
+			"SourceBaseURL": {
+				"type": "string"
 			},
-			"file_Name_in_the_sink": {
-				"type": "String"
+			"SourceRelativeURL": {
+				"type": "string"
+			},
+			"SinkFileName": {
+				"type": "string"
 			}
 		},
 		"annotations": []
