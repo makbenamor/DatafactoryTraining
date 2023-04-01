@@ -6,24 +6,29 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "ecdc_file_list_for_all_files",
+						"referenceName": "sink_ecdc_raw_dl_static",
 						"type": "DatasetReference"
 					},
-					"name": "source1"
+					"name": "casesdeathssource"
 				}
 			],
 			"sinks": [],
 			"transformations": [],
 			"scriptLines": [
 				"source(output(",
-				"          sourceBaseURL as string,",
-				"          sourceRelativeURL as string,",
-				"          sinkFileName as string",
+				"          country as string,",
+				"          country_code as string,",
+				"          continent as string,",
+				"          population as string,",
+				"          indicator as string,",
+				"          daily_count as string,",
+				"          date as string,",
+				"          rate_14_day as string,",
+				"          source as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false,",
-				"     documentForm: 'documentPerLine') ~> source1"
+				"     ignoreNoFilesFound: false) ~> casesdeathssource"
 			]
 		}
 	}
