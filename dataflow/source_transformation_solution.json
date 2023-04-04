@@ -19,7 +19,14 @@
 					"name": "country"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"name": "SinkWeekly"
+				},
+				{
+					"name": "sink2"
+				}
+			],
 			"transformations": [
 				{
 					"name": "selectrequiredcols"
@@ -84,8 +91,16 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select1",
-				"select1 split(indicator=='Daily hospital occupancy' || indicator== 'Daily ICU occupancy',",
-				"     disjoint: false) ~> splitdailyFromWeeekly@(Daily, Weekly)"
+				"select1 split(indicator=='Weekly new hospital admissions per 100k' || indicator== \"Weekly new ICU admissions per 100k\",",
+				"     disjoint: false) ~> splitdailyFromWeeekly@(Weekly, Daily)",
+				"splitdailyFromWeeekly@Weekly sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SinkWeekly",
+				"splitdailyFromWeeekly@Daily sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink2"
 			]
 		}
 	}
