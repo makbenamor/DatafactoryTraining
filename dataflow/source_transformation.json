@@ -21,7 +21,11 @@
 			],
 			"sinks": [
 				{
-					"name": "sink1"
+					"name": "sink1",
+					"rejectedDataLinkedService": {
+						"referenceName": "DataLakeStorage_sakimo2024",
+						"type": "LinkedServiceReference"
+					}
 				}
 			],
 			"transformations": [
@@ -66,7 +70,7 @@
 				"     ignoreNoFilesFound: false) ~> hospitaladmissionraw",
 				"select1 filter(startsWith(indicator, 'Daily')) ~> filterdailyonly",
 				"filterdailyonly pivot(groupBy(country,",
-				"          date,",
+				"          reported_date,",
 				"          source),",
 				"     pivotBy(indicator, ['Daily hospital occupancy', 'Daily ICU occupancy']),",
 				"     count = count(indicator),",
@@ -75,8 +79,8 @@
 				"hospitaladmissionraw select(mapColumn(",
 				"          country,",
 				"          indicator,",
-				"          date,",
-				"          year_week,",
+				"          reported_date = date,",
+				"          reported_year_week = year_week,",
 				"          value,",
 				"          source",
 				"     ),",
@@ -91,7 +95,7 @@
 				"          country_code_2_digit,",
 				"          country_code_3_digit,",
 				"          population,",
-				"          reported_date = date,",
+				"          reported_date,",
 				"          hospital_occupancy_count = {countDaily hospital occupancy},",
 				"          icu_occupancy_count = {countDaily ICU occupancy},",
 				"          source",
@@ -104,7 +108,18 @@
 				"     store: 'cache',",
 				"     format: 'inline',",
 				"     output: true,",
-				"     saveOrder: 1) ~> sink1"
+				"     saveOrder: 1,",
+				"     mapColumn(",
+				"          country,",
+				"          country_code_2_digit,",
+				"          country_code_3_digit,",
+				"          population,",
+				"          reported_date,",
+				"          hospital_occupancy_count,",
+				"          icu_occupancy_count,",
+				"          source",
+				"     ),",
+				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
 	}
