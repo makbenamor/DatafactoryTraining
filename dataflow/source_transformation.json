@@ -6,17 +6,17 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "Hospital_admissions",
-						"type": "DatasetReference"
-					},
-					"name": "source1"
-				},
-				{
-					"dataset": {
 						"referenceName": "lookup_country",
 						"type": "DatasetReference"
 					},
 					"name": "lookupstream"
+				},
+				{
+					"dataset": {
+						"referenceName": "Hospital_admissions",
+						"type": "DatasetReference"
+					},
+					"name": "hospitaladmissionraw"
 				}
 			],
 			"sinks": [
@@ -44,19 +44,6 @@
 			"scriptLines": [
 				"source(output(",
 				"          country as string,",
-				"          indicator as string,",
-				"          date as string,",
-				"          year_week as string,",
-				"          value as string,",
-				"          source as string,",
-				"          url as string",
-				"     ),",
-				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     inferDriftedColumnTypes: true,",
-				"     ignoreNoFilesFound: false) ~> source1",
-				"source(output(",
-				"          country as string,",
 				"          country_code_2_digit as string,",
 				"          country_code_3_digit as string,",
 				"          continent as string,",
@@ -65,6 +52,18 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> lookupstream",
+				"source(output(",
+				"          country as string,",
+				"          indicator as string,",
+				"          date as date,",
+				"          year_week as string,",
+				"          value as double,",
+				"          source as string,",
+				"          url as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> hospitaladmissionraw",
 				"select1 filter(startsWith(indicator, 'Daily')) ~> filterdailyonly",
 				"filterdailyonly pivot(groupBy(country,",
 				"          date,",
@@ -73,7 +72,7 @@
 				"     count = count(indicator),",
 				"     columnNaming: '$N$V',",
 				"     lateral: true) ~> pivot1",
-				"source1 select(mapColumn(",
+				"hospitaladmissionraw select(mapColumn(",
 				"          country,",
 				"          indicator,",
 				"          date,",
