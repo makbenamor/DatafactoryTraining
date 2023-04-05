@@ -78,6 +78,9 @@
 				},
 				{
 					"name": "SelectDaily"
+				},
+				{
+					"name": "aggregate1"
 				}
 			],
 			"scriptLines": [
@@ -130,7 +133,7 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> selectrequiredcols",
-				"selectrequiredcols, country lookup(selectrequiredcols@country == country@country,",
+				"aggregate1, country lookup(selectrequiredcols@country == country@country,",
 				"     multiple: false,",
 				"     pickup: 'any',",
 				"     broadcast: 'auto')~> lookup1",
@@ -209,6 +212,8 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SelectDaily",
+				"selectrequiredcols aggregate(groupBy(country),",
+				"     value = sum(value)) ~> aggregate1",
 				"SelectWeekly sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     partitionFileNames:['fileweekly.csv'],",
