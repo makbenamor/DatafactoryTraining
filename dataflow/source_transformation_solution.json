@@ -17,6 +17,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "country"
+				},
+				{
+					"dataset": {
+						"referenceName": "DimDateSource",
+						"type": "DatasetReference"
+					},
+					"name": "dimsourceDate"
 				}
 			],
 			"sinks": [
@@ -39,6 +46,12 @@
 				},
 				{
 					"name": "splitdailyFromWeeekly"
+				},
+				{
+					"name": "ecdcyearmonth"
+				},
+				{
+					"name": "AggDimDate"
 				}
 			],
 			"scriptLines": [
@@ -64,6 +77,23 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> country",
+				"source(output(",
+				"          date_key as string,",
+				"          date as date,",
+				"          year as short,",
+				"          month as short,",
+				"          day as short,",
+				"          day_name as string,",
+				"          day_of_year as short,",
+				"          week_of_month as short,",
+				"          week_of_year as short,",
+				"          month_name as string,",
+				"          year_month as integer,",
+				"          year_week as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> dimsourceDate",
 				"hospitaladmissionraw select(mapColumn(",
 				"          country,",
 				"          indicator,",
@@ -93,6 +123,10 @@
 				"     skipDuplicateMapOutputs: true) ~> select1",
 				"select1 split(indicator=='Weekly new hospital admissions per 100k' || indicator== \"Weekly new ICU admissions per 100k\",",
 				"     disjoint: false) ~> splitdailyFromWeeekly@(Weekly, Daily)",
+				"dimsourceDate derive(ecdc_year_week = toString(year) + '-W' + lpad(toString(week_of_year),2,'0')) ~> ecdcyearmonth",
+				"ecdcyearmonth aggregate(groupBy(ecdc_year_week),",
+				"     week_start_date = min(date),",
+				"          week_end_date = max(date)) ~> AggDimDate",
 				"splitdailyFromWeeekly@Weekly sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
