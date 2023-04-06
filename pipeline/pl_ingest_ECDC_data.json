@@ -1,5 +1,5 @@
 {
-	"name": "dynamic_lookup_copy1",
+	"name": "pl_ingest_ECDC_data",
 	"properties": {
 		"activities": [
 			{
