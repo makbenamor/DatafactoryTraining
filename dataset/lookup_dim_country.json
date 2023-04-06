@@ -1,5 +1,5 @@
 {
-	"name": "lookup_country",
+	"name": "lookup_dim_country",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "DataLakeStorage_sakimo2024",

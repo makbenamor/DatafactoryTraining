@@ -13,7 +13,7 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "lookup_country",
+						"referenceName": "lookup_dim_country",
 						"type": "DatasetReference"
 					},
 					"name": "countryLookup"
