@@ -1,5 +1,5 @@
 {
-	"name": "sink1_raw_ADLS",
+	"name": "sink_ecdc_raw_hospital_admission",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "DataLakeStorage_sakimo2024",

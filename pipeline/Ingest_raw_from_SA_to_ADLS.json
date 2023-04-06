@@ -146,7 +146,7 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "sink1_raw_ADLS",
+									"referenceName": "sink_ecdc_raw_hospital_admission",
 									"type": "DatasetReference"
 								}
 							]

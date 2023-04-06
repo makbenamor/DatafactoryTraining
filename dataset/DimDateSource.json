@@ -11,8 +11,8 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": "dim_date.csv",
-				"folderPath": "1.raw_files",
-				"fileSystem": "raw-files-covid"
+				"folderPath": "dim_date",
+				"fileSystem": "lookup"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

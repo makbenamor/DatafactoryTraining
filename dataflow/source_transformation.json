@@ -12,10 +12,6 @@
 					"name": "lookupstream"
 				},
 				{
-					"dataset": {
-						"referenceName": "Hospital_admissions",
-						"type": "DatasetReference"
-					},
 					"name": "hospitaladmissionraw"
 				}
 			],
@@ -66,8 +62,7 @@
 				"          url as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> hospitaladmissionraw",
+				"     validateSchema: false) ~> hospitaladmissionraw",
 				"select1 filter(startsWith(indicator, 'Daily')) ~> filterdailyonly",
 				"filterdailyonly pivot(groupBy(country,",
 				"          reported_date,",
