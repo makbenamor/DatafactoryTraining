@@ -1,0 +1,38 @@
+{
+	"name": "Learn_Dataflow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "sales_test",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "pivot1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ProductID as string,",
+				"          country as string,",
+				"          Sales as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 pivot(groupBy(ProductID),",
+				"     pivotBy(country, ['USA', 'France', 'UK']),",
+				"     {} = sum(Sales),",
+				"     columnNaming: '$N$V',",
+				"     lateral: true) ~> pivot1"
+			]
+		}
+	}
+}
