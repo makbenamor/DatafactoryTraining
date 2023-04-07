@@ -1,0 +1,97 @@
+{
+	"name": "races",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakeStorage_sakimo2024",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "races.csv",
+				"folderPath": "raw/2021-04-18",
+				"fileSystem": "pyspark"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "{\"resultId\":1",
+				"type": "String"
+			},
+			{
+				"name": "\"raceId\":18",
+				"type": "String"
+			},
+			{
+				"name": "\"driverId\":1",
+				"type": "String"
+			},
+			{
+				"name": "\"constructorId\":1",
+				"type": "String"
+			},
+			{
+				"name": "\"number\":22",
+				"type": "String"
+			},
+			{
+				"name": "\"grid\":1",
+				"type": "String"
+			},
+			{
+				"name": "\"position\":1",
+				"type": "String"
+			},
+			{
+				"name": "\"positionText\":1",
+				"type": "String"
+			},
+			{
+				"name": "\"positionOrder\":1",
+				"type": "String"
+			},
+			{
+				"name": "\"points\":10",
+				"type": "String"
+			},
+			{
+				"name": "\"laps\":58",
+				"type": "String"
+			},
+			{
+				"name": "\"time\":\"1:34:50.616\"",
+				"type": "String"
+			},
+			{
+				"name": "\"milliseconds\":5690616",
+				"type": "String"
+			},
+			{
+				"name": "\"fastestLap\":39",
+				"type": "String"
+			},
+			{
+				"name": "\"rank\":2",
+				"type": "String"
+			},
+			{
+				"name": "\"fastestLapTime\":\"1:27.452\"",
+				"type": "String"
+			},
+			{
+				"name": "\"fastestLapSpeed\":218.3",
+				"type": "String"
+			},
+			{
+				"name": "\"statusId\":1}",
+				"type": "String"
+			}
+		]
+	}
+}

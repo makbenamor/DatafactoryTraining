@@ -1,0 +1,49 @@
+{
+	"name": "learn_dataflow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "races",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "window1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          {{\"resultId\":1} as string,",
+				"          {\"raceId\":18} as string,",
+				"          {\"driverId\":1} as string,",
+				"          {\"constructorId\":1} as string,",
+				"          {\"number\":22} as string,",
+				"          {\"grid\":1} as string,",
+				"          {\"position\":1} as string,",
+				"          {\"positionText\":1} as string,",
+				"          {\"positionOrder\":1} as string,",
+				"          {\"points\":10} as string,",
+				"          {\"laps\":58} as string,",
+				"          {\"time\":\"1:34:50.616\"} as string,",
+				"          {\"milliseconds\":5690616} as string,",
+				"          {\"fastestLap\":39} as string,",
+				"          {\"rank\":2} as string,",
+				"          {\"fastestLapTime\":\"1:27.452\"} as string,",
+				"          {\"fastestLapSpeed\":218.3} as string,",
+				"          {\"statusId\":1}} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 window() ~> window1"
+			]
+		}
+	}
+}
