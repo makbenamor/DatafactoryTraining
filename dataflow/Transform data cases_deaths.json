@@ -6,7 +6,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "processed_ecdc_cases_deaths",
+						"referenceName": "raw_ecdc_cases_deaths",
 						"type": "DatasetReference"
 					},
 					"name": "casesdeathssource"
@@ -119,6 +119,7 @@
 				"          source as string",
 				"     ),",
 				"     partitionFileNames:['cases_deaths_processed'],",
+				"     truncate: true,",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
