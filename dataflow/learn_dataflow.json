@@ -15,7 +15,7 @@
 			"sinks": [],
 			"transformations": [
 				{
-					"name": "window1"
+					"name": "derivedColumn1"
 				}
 			],
 			"scriptLines": [
@@ -37,12 +37,12 @@
 				"          {\"rank\":2} as string,",
 				"          {\"fastestLapTime\":\"1:27.452\"} as string,",
 				"          {\"fastestLapSpeed\":218.3} as string,",
-				"          {\"statusId\":1}} as string",
+				"          {\"statusId\":1} as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source1",
-				"source1 window() ~> window1"
+				"source1 derive() ~> derivedColumn1"
 			]
 		}
 	}
