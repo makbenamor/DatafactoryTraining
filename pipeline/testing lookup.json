@@ -108,28 +108,8 @@
 										"fileExtension": ".txt"
 									}
 								},
-								"enableStaging": false,
-								"translator": {
-									"type": "TabularTranslator",
-									"typeConversion": true,
-									"typeConversionSettings": {
-										"allowDataTruncation": true,
-										"treatBooleanAsNumber": false
-									}
-								}
+								"enableStaging": false
 							},
-							"inputs": [
-								{
-									"referenceName": "http_dynamic_raw_csv",
-									"type": "DatasetReference",
-									"parameters": {
-										"RelativeURL": {
-											"value": "@variables('sourceSelectedURL')",
-											"type": "Expression"
-										}
-									}
-								}
-							],
 							"outputs": [
 								{
 									"referenceName": "sink_ecdc_raw_dl",

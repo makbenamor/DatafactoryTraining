@@ -11,7 +11,7 @@
 			}
 		},
 		"folder": {
-			"name": "Covid_datasets"
+			"name": "Dynamic_Datasets"
 		},
 		"annotations": [],
 		"type": "DelimitedText",

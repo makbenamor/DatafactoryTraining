@@ -6,7 +6,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "sink_ecdc_raw_cases_deaths",
+						"referenceName": "processed_ecdc_cases_deaths",
 						"type": "DatasetReference"
 					},
 					"name": "casesdeathssource"
@@ -21,6 +21,10 @@
 			],
 			"sinks": [
 				{
+					"dataset": {
+						"referenceName": "processed_ecdc_cases_deaths",
+						"type": "DatasetReference"
+					},
 					"name": "europecasesdeaths"
 				}
 			],
@@ -103,12 +107,24 @@
 				"     skipDuplicateMapOutputs: true) ~> SelectforSink",
 				"SelectforSink sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     input(",
+				"          country as string,",
+				"          country_code as string,",
+				"          continent as string,",
+				"          population as string,",
+				"          indicator as string,",
+				"          daily_count as string,",
+				"          date as string,",
+				"          rate_14_day as string,",
+				"          source as string",
+				"     ),",
 				"     partitionFileNames:['cases_deaths_processed'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     partitionBy('hash', 1),",
-				"     preCommands: [],",
-				"     postCommands: []) ~> europecasesdeaths"
+				"     partitionBy('hash', 1)) ~> europecasesdeaths"
 			]
 		}
 	}
