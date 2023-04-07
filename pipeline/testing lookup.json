@@ -109,19 +109,7 @@
 									}
 								},
 								"enableStaging": false
-							},
-							"outputs": [
-								{
-									"referenceName": "sink_ecdc_raw_dl",
-									"type": "DatasetReference",
-									"parameters": {
-										"FileName": {
-											"value": "@item().sinkFileName",
-											"type": "Expression"
-										}
-									}
-								}
-							]
+							}
 						},
 						{
 							"name": "Set variable sinkFileName",

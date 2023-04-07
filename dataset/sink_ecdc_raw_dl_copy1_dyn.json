@@ -22,8 +22,8 @@
 					"value": "@dataset().FileName",
 					"type": "Expression"
 				},
-				"folderPath": "ecdc",
-				"fileSystem": "raw-files-covid"
+				"folderPath": "1.raw_files/Ecdc",
+				"fileSystem": "covid-adf-course"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
