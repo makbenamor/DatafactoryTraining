@@ -10,9 +10,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "dim_date.csv",
-				"folderPath": "dim_date",
-				"fileSystem": "lookup"
+				"folderPath": "1.raw_files/dim_date",
+				"fileSystem": "covid-adf-course"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

@@ -13,7 +13,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileSystem": "processed"
+				"folderPath": "2.processed/country_responce/daily",
+				"fileSystem": "covid-adf-course"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

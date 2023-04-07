@@ -11,8 +11,8 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": "hospital_admissions.csv",
-				"folderPath": "ecdc/hospital_admissions",
-				"fileSystem": "raw-files-covid"
+				"folderPath": "1.raw_files/Ecdc",
+				"fileSystem": "covid-adf-course"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
