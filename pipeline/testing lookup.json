@@ -148,6 +148,9 @@
 				"type": "String"
 			}
 		},
+		"folder": {
+			"name": "Demo"
+		},
 		"annotations": []
 	}
 }
