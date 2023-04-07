@@ -5,7 +5,14 @@
 			{
 				"name": "Copy data1",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Data flow1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -20,6 +27,7 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
+							"wildcardFileName": "*",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
@@ -38,6 +46,11 @@
 						"type": "TabularTranslator",
 						"mappings": [
 							{
+								"source": {
+									"name": "country",
+									"type": "String",
+									"physicalType": "String"
+								},
 								"sink": {
 									"name": "country",
 									"type": "String",
@@ -45,6 +58,11 @@
 								}
 							},
 							{
+								"source": {
+									"name": "country_code_2_digit",
+									"type": "String",
+									"physicalType": "String"
+								},
 								"sink": {
 									"name": "country_code_2_digit",
 									"type": "String",
@@ -52,6 +70,11 @@
 								}
 							},
 							{
+								"source": {
+									"name": "country_code_3_digit",
+									"type": "String",
+									"physicalType": "String"
+								},
 								"sink": {
 									"name": "country_code_3_digit",
 									"type": "String",
@@ -59,6 +82,11 @@
 								}
 							},
 							{
+								"source": {
+									"name": "population",
+									"type": "String",
+									"physicalType": "String"
+								},
 								"sink": {
 									"name": "population",
 									"type": "Int64",
@@ -66,6 +94,11 @@
 								}
 							},
 							{
+								"source": {
+									"name": "confirmed cases_count",
+									"type": "String",
+									"physicalType": "String"
+								},
 								"sink": {
 									"name": "cases_count",
 									"type": "Int64",
@@ -73,6 +106,11 @@
 								}
 							},
 							{
+								"source": {
+									"name": "deaths_count",
+									"type": "String",
+									"physicalType": "String"
+								},
 								"sink": {
 									"name": "deaths_count",
 									"type": "Int64",
@@ -80,6 +118,11 @@
 								}
 							},
 							{
+								"source": {
+									"name": "reported_Date",
+									"type": "String",
+									"physicalType": "String"
+								},
 								"sink": {
 									"name": "reported_date",
 									"type": "DateTime",
@@ -113,6 +156,30 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "Data flow1",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "Transform data cases_deaths",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
 			}
 		],
 		"folder": {

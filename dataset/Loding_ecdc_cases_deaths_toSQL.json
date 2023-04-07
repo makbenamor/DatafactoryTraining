@@ -14,8 +14,8 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": "cases_deaths_processed",
-				"folderPath": "ecdc/cases_deaths",
-				"fileSystem": "processed"
+				"folderPath": "2.processed/cases_deaths",
+				"fileSystem": "covid-adf-course"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
