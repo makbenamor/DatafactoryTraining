@@ -37,7 +37,7 @@
 				"          {\"rank\":2} as string,",
 				"          {\"fastestLapTime\":\"1:27.452\"} as string,",
 				"          {\"fastestLapSpeed\":218.3} as string,",
-				"          {\"statusId\":1} as string",
+				"          {\"statusId\":1}} as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
