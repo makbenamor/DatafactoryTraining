@@ -33,6 +33,9 @@
 					"referenceName": "DataLakeStorage_sakimo2024",
 					"type": "LinkedServiceReference"
 				},
+				"folder": {
+					"name": "Covid_datasets"
+				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
@@ -88,6 +91,9 @@
 				"linkedServiceName": {
 					"referenceName": "DataLakeStorage_sakimo2024",
 					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Covid_datasets"
 				},
 				"annotations": [],
 				"type": "DelimitedText",

@@ -1290,6 +1290,9 @@
 					"referenceName": "AzureSqlDatabase1",
 					"type": "LinkedServiceReference"
 				},
+				"folder": {
+					"name": "Covid_datasets"
+				},
 				"annotations": [],
 				"type": "AzureSqlTable",
 				"schema": [
@@ -1386,6 +1389,9 @@
 				"linkedServiceName": {
 					"referenceName": "AzureSqlDatabase1",
 					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Covid_datasets"
 				},
 				"annotations": [],
 				"type": "AzureSqlTable",
@@ -1530,6 +1536,9 @@
 					"referenceName": "DataLakeStorage_sakimo2024",
 					"type": "LinkedServiceReference"
 				},
+				"folder": {
+					"name": "Covid_datasets"
+				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
@@ -1579,6 +1588,9 @@
 				"linkedServiceName": {
 					"referenceName": "DataLakeStorage_sakimo2024",
 					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Covid_datasets"
 				},
 				"annotations": [],
 				"type": "DelimitedText",
@@ -1707,6 +1719,9 @@
 					"referenceName": "DataLakeStorage_sakimo2024",
 					"type": "LinkedServiceReference"
 				},
+				"folder": {
+					"name": "Covid_datasets"
+				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
@@ -1797,6 +1812,9 @@
 					"referenceName": "DataLakeStorage_sakimo2024",
 					"type": "LinkedServiceReference"
 				},
+				"folder": {
+					"name": "Covid_datasets"
+				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
@@ -1854,6 +1872,9 @@
 				"linkedServiceName": {
 					"referenceName": "DataLakeStorage_sakimo2024",
 					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Covid_datasets"
 				},
 				"annotations": [],
 				"type": "DelimitedText",
