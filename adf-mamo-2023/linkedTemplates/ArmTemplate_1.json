@@ -115,7 +115,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"folderPath": "2.processed/hospital_admission",
+						"folderPath": "2.processed/hospital_admission/weekly_sink_processed",
 						"fileSystem": "covid-adf-course"
 					},
 					"columnDelimiter": ",",
@@ -124,6 +124,61 @@
 					"quoteChar": "\""
 				},
 				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/hospital_admissions_daily')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "country",
+						"type": "varchar"
+					},
+					{
+						"name": "country_code_2_digit",
+						"type": "varchar"
+					},
+					{
+						"name": "country_code_3_digit",
+						"type": "varchar"
+					},
+					{
+						"name": "population",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "reported_date",
+						"type": "date"
+					},
+					{
+						"name": "hospital_occupancy_count",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "icu_occupancy_count",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "source",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "covid_reporting",
+					"table": "hospital_admissions_daily"
+				}
 			},
 			"dependsOn": []
 		},
@@ -452,7 +507,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Copy data1",
+						"name": "Copy_cases_deaths",
 						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
@@ -605,6 +660,168 @@
 								"parameters": {}
 							}
 						]
+					},
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Copy_cases_deaths",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFileName": "*",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"preCopyScript": "Truncate Table covid_reporting.hospital_admissions_daily",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "country",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "country",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "country_code_2_digit",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "country_code_2_digit",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "country_code_3_digit",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "country_code_3_digit",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "population",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "population",
+											"type": "Int64",
+											"physicalType": "bigint"
+										}
+									},
+									{
+										"source": {
+											"name": "reported_date",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "reported_date",
+											"type": "DateTime",
+											"physicalType": "date"
+										}
+									},
+									{
+										"source": {
+											"name": "hospital_occupancy_count",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "hospital_occupancy_count",
+											"type": "Int64",
+											"physicalType": "bigint"
+										}
+									},
+									{
+										"source": {
+											"name": "icu_occupancy_count",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "icu_occupancy_count",
+											"type": "Int64",
+											"physicalType": "bigint"
+										}
+									},
+									{
+										"source": {
+											"name": "source",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "source",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "Daily_hospital_admission_processed",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "hospital_admissions_daily",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
 					}
 				],
 				"policy": {
@@ -616,7 +833,9 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/hospital_admissions_daily')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/pl_ingest_ECDC_data')]",
@@ -1168,7 +1387,7 @@
 						},
 						{
 							"dataset": {
-								"referenceName": "Daily_sink_processed",
+								"referenceName": "Daily_hospital_admission_processed",
 								"type": "DatasetReference"
 							},
 							"name": "DailySink"
@@ -1347,19 +1566,25 @@
 						"     skipDuplicateMapOutputs: true) ~> select4",
 						"select3 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
+						"     partitionFileNames:['weekly_hospital_admission_processed.csv'],",
+						"     truncate: true,",
 						"     umask: 0022,",
 						"     preCommands: [],",
 						"     postCommands: [],",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
-						"     saveOrder: 1) ~> WeeklySink",
+						"     saveOrder: 1,",
+						"     partitionBy('hash', 1)) ~> WeeklySink",
 						"select4 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
+						"     partitionFileNames:['daily_hospital_admission.csv'],",
+						"     truncate: true,",
 						"     umask: 0022,",
 						"     preCommands: [],",
 						"     postCommands: [],",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> DailySink"
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> DailySink"
 					]
 				}
 			},
@@ -1368,13 +1593,13 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/data_Processing_daths_cases')]",
+			"name": "[concat(parameters('factoryName'), '/Processing_deaths_cases')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "Data flow1",
+						"name": "Cases deaths processing Data flow",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [],
 						"policy": {
@@ -1479,6 +1704,59 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/Ingest_raw_from_HTTP_to_ADLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Processing_hospital_admission')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Processing_hospital_admission",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Transform data hospital_admission",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"HospitalAdmissionRaw": {},
+									"CountryDim": {},
+									"DateDim": {},
+									"WeeklySink": {},
+									"DailySink": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "Covid_udemy_course"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/Transform data hospital_admission')]"
 			]
 		}
 	]

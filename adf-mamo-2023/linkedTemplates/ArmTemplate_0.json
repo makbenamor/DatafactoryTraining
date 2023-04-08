@@ -173,7 +173,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Daily_sink_processed')]",
+			"name": "[concat(parameters('factoryName'), '/Daily_hospital_admission_processed')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -189,7 +189,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"folderPath": "2.processed/hospital_admission",
+						"folderPath": "2.processed/hospital_admission/weekly_hospital_admission_processed",
 						"fileSystem": "covid-adf-course"
 					},
 					"columnDelimiter": ",",
