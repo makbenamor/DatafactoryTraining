@@ -5,6 +5,9 @@
 			"referenceName": "AzureSqlDatabase1",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "Covid_datasets"
+		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [
