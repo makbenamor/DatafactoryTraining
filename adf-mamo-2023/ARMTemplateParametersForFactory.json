@@ -5,6 +5,9 @@
 		"factoryName": {
 			"value": "adf-mamo-2023"
 		},
+		"AzureSqlDatabase1_connectionString": {
+			"value": ""
+		},
 		"Blob_Storage_bstorageeurostat_connectionString": {
 			"value": ""
 		},

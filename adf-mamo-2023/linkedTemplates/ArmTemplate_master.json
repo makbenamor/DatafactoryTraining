@@ -7,6 +7,10 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "adf-mamo-2023"
 		},
+		"AzureSqlDatabase1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase1'"
+		},
 		"Blob_Storage_bstorageeurostat_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'Blob_Storage_bstorageeurostat'"
@@ -69,6 +73,9 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"AzureSqlDatabase1_connectionString": {
+						"value": "[parameters('AzureSqlDatabase1_connectionString')]"
 					},
 					"Blob_Storage_bstorageeurostat_connectionString": {
 						"value": "[parameters('Blob_Storage_bstorageeurostat_connectionString')]"
