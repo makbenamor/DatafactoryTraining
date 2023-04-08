@@ -1,5 +1,5 @@
 {
-	"name": "copy_data_toSQL",
+	"name": "CopyProcessedtoSQL",
 	"properties": {
 		"activities": [
 			{
@@ -156,7 +156,7 @@
 				]
 			},
 			{
-				"name": "Copy data1",
+				"name": "copy_Hospital_admission_processed",
 				"type": "Copy",
 				"dependsOn": [
 					{
