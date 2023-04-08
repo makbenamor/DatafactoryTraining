@@ -36,7 +36,7 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "Daily_sink_processed",
+						"referenceName": "Daily_hospital_admission_processed",
 						"type": "DatasetReference"
 					},
 					"name": "DailySink"

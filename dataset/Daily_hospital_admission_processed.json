@@ -1,5 +1,5 @@
 {
-	"name": "Daily_sink_processed",
+	"name": "Daily_hospital_admission_processed",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "DataLakeStorage_sakimo2024",
