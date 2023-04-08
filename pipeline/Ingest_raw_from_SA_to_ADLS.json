@@ -146,8 +146,11 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "sink_ecdc_raw_hospital_admission",
-									"type": "DatasetReference"
+									"referenceName": "sink_ecdc_raw_dl_copy1_dyn",
+									"type": "DatasetReference",
+									"parameters": {
+										"FileName": "cases_deaths.csv"
+									}
 								}
 							]
 						},

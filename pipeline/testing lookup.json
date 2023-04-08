@@ -125,13 +125,19 @@
 							"inputs": [
 								{
 									"referenceName": "http_cases_deaths_raw_csv",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"RelativeURL": "file1"
+									}
 								}
 							],
 							"outputs": [
 								{
 									"referenceName": "sink_ecdc_raw_dl_copy1_dyn",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"FileName": "file1"
+									}
 								}
 							]
 						},
