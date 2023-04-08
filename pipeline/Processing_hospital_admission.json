@@ -1,9 +1,9 @@
 {
-	"name": "data_Processing_daths_cases",
+	"name": "Processing_hospital_admission",
 	"properties": {
 		"activities": [
 			{
-				"name": "Cases deaths processing Data flow",
+				"name": "Processing_hospital_admission",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "Transform data cases_deaths",
+						"referenceName": "Transform data hospital_admission",
 						"type": "DataFlowReference"
 					},
 					"compute": {
