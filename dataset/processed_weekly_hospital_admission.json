@@ -1,12 +1,9 @@
 {
-	"name": "Daily_sink_processed",
+	"name": "processed_weekly_hospital_admission",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "DataLakeStorage_sakimo2024",
 			"type": "LinkedServiceReference"
-		},
-		"folder": {
-			"name": "Dynamic_Datasets"
 		},
 		"annotations": [],
 		"type": "DelimitedText",
