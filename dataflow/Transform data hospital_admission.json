@@ -52,6 +52,9 @@
 				},
 				{
 					"name": "derivedColumn1"
+				},
+				{
+					"name": "pivot1"
 				}
 			],
 			"scriptLines": [
@@ -132,7 +135,9 @@
 				"     week_start_date = min(date),",
 				"          week_end_date = max(date)) ~> AggDimDate",
 				"DateDim derive(Ecdc_year_week = toString(year) + '-W' + lpad(toString(week_of_year), 2, '0')) ~> derivedColumn1",
-				"join1 sink(validateSchema: false,",
+				"join1 pivot(columnNaming: '$N$V',",
+				"     lateral: true) ~> pivot1",
+				"pivot1 sink(validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     store: 'cache',",
