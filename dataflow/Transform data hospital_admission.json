@@ -215,19 +215,26 @@
 				"     skipDuplicateMapOutputs: true) ~> select4",
 				"select3 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     partitionFileNames:['weekly_hospital_admission_processed.csv'],",
+				"     truncate: true,",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     saveOrder: 1) ~> WeeklySink",
+				"     saveOrder: 1,",
+				"     partitionBy('hash', 1)) ~> WeeklySink",
 				"select4 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     partitionFileNames:[''],",
+				"     truncate: true,",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> DailySink"
+				"     skipDuplicateMapOutputs: true,",
+				"     header: (daily_hospital_admission_processed),",
+				"     partitionBy('hash', 1)) ~> DailySink"
 			]
 		}
 	}
