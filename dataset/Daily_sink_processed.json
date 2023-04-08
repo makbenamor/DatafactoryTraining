@@ -13,7 +13,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "2.processed/hospital_admission",
+				"folderPath": "2.processed/hospital_admission/weekly_hospital_admission_processed",
 				"fileSystem": "covid-adf-course"
 			},
 			"columnDelimiter": ",",
