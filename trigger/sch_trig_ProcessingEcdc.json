@@ -9,6 +9,12 @@
 					"referenceName": "CopyProcessedtoSQL",
 					"type": "PipelineReference"
 				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "pl_ingest_ECDC_data",
+					"type": "PipelineReference"
+				}
 			}
 		],
 		"type": "ScheduleTrigger",
