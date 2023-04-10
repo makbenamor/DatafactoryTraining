@@ -241,7 +241,7 @@
 				"pipelines": [
 					{
 						"pipelineReference": {
-							"referenceName": "CopyProcessedtoSQL",
+							"referenceName": "pl_ingest_ECDC_data",
 							"type": "PipelineReference"
 						},
 						"parameters": {}
