@@ -17,21 +17,11 @@
 						"type": "DatasetReference"
 					},
 					"name": "NestedJson"
-				},
-				{
-					"dataset": {
-						"referenceName": "WeatherAPI",
-						"type": "DatasetReference"
-					},
-					"name": "WeatherAPI"
 				}
 			],
 			"sinks": [
 				{
 					"name": "sink1"
-				},
-				{
-					"name": "sink2"
 				}
 			],
 			"transformations": [
@@ -42,16 +32,7 @@
 					"name": "flatten1"
 				},
 				{
-					"name": "stringify1"
-				},
-				{
-					"name": "parse1"
-				},
-				{
-					"name": "select2"
-				},
-				{
-					"name": "select3"
+					"name": "alterRow1"
 				}
 			],
 			"scriptLines": [
@@ -75,17 +56,6 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     documentForm: 'documentPerLine') ~> NestedJson",
-				"source(output(",
-				"          body as ({@context} as string[], geometry as (coordinates as double[], type as string), id as string, properties as ({@id} as string, {@type} as string, county as string, cwa as string, fireWeatherZone as string, forecast as string, forecastGridData as string, forecastHourly as string, forecastOffice as string, forecastZone as string, gridId as string, gridX as short, gridY as short, observationStations as string, radarStation as string, relativeLocation as (geometry as (coordinates as double[], type as string), properties as (bearing as (unitCode as string, value as short), city as string, distance as (unitCode as string, value as double), state as string), type as string), timeZone as string), type as string),",
-				"          headers as [string,string]",
-				"     ),",
-				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     httpMethod: 'GET',",
-				"     timeout: 30,",
-				"     requestInterval: 0,",
-				"     paginationRules: ['supportRFC5988' -> 'true'],",
-				"     responseFormat: ['type' -> 'json', 'documentForm' -> 'documentPerLine']) ~> WeatherAPI",
 				"Races cast(output(",
 				"          date as date 'dd-MM-yyyy'",
 				"     ),",
@@ -96,37 +66,14 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> flatten1",
-				"WeatherAPI stringify(MyProprities = body.properties.relativeLocation.properties.bearing ? string,",
-				"     format: 'json') ~> stringify1",
-				"select3 parse(myoutput = {body.properties.relativeLocation.properties} ? (unitCode as string,",
-				"     value as integer)[],",
-				"     format: 'json',",
-				"     documentForm: 'documentPerLine') ~> parse1",
-				"parse1 select(mapColumn(",
-				"          unit_code = myoutput[1].unitCode,",
-				"          value = myoutput[1].value",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select2",
-				"stringify1 select(mapColumn(",
-				"          MyProprities",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select3",
-				"cast1 sink(validateSchema: false,",
+				"cast1 alterRow() ~> alterRow1",
+				"alterRow1 sink(validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     store: 'cache',",
 				"     format: 'inline',",
 				"     output: false,",
-				"     saveOrder: 1) ~> sink1",
-				"select2 sink(validateSchema: false,",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     store: 'cache',",
-				"     format: 'inline',",
-				"     output: false,",
-				"     saveOrder: 1) ~> sink2"
+				"     saveOrder: 1) ~> sink1"
 			]
 		}
 	}
