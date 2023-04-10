@@ -1,0 +1,20 @@
+{
+	"name": "NestedJson",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakeStorage_sakimo2024",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "nested JSON 2.json",
+				"folderPath": "1.raw_files",
+				"fileSystem": "covid-adf-course"
+			}
+		},
+		"schema": {}
+	}
+}
