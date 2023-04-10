@@ -1,8 +1,8 @@
 {
-	"name": "scheduled_trigger",
+	"name": "sch_trig_ProcessingEcdc",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Stopped",
+		"runtimeState": "Started",
 		"pipelines": [
 			{
 				"pipelineReference": {
@@ -16,7 +16,7 @@
 			"recurrence": {
 				"frequency": "Minute",
 				"interval": 2,
-				"startTime": "2023-04-10T09:30:00Z",
+				"startTime": "2023-04-10T09:42:00Z",
 				"timeZone": "UTC"
 			}
 		}
