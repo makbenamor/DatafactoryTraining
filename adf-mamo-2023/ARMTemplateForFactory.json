@@ -2447,12 +2447,12 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/scheduled_trigger')]",
+			"name": "[concat(parameters('factoryName'), '/sch_trig_ProcessingEcdc')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Stopped",
+				"runtimeState": "Started",
 				"pipelines": [
 					{
 						"pipelineReference": {
@@ -2467,7 +2467,7 @@
 					"recurrence": {
 						"frequency": "Minute",
 						"interval": 2,
-						"startTime": "2023-04-10T09:30:00Z",
+						"startTime": "2023-04-10T09:42:00Z",
 						"timeZone": "UTC"
 					}
 				}
