@@ -17,6 +17,9 @@
 						"type": "DatasetReference"
 					},
 					"name": "source2"
+				},
+				{
+					"name": "source3"
 				}
 			],
 			"sinks": [
@@ -53,6 +56,8 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     documentForm: 'documentPerLine') ~> source2",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false) ~> source3",
 				"source1 cast(output(",
 				"          date as date 'dd-MM-yyyy'",
 				"     ),",

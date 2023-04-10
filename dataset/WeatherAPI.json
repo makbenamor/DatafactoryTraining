@@ -1,0 +1,15 @@
+{
+	"name": "WeatherAPI",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "weather_gov_API",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": "points/39.7456,-97.0892"
+		},
+		"schema": []
+	}
+}
