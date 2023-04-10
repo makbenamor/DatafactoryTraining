@@ -122,6 +122,26 @@
 					},
 					"event_trigger_1_properties_typeProperties_scope": {
 						"value": "[parameters('event_trigger_1_properties_typeProperties_scope')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'adf-mamo-2023_ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "adf-mamo-2023_ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
 					},
 					"scheduled1_properties_Ingest_raw_from_HTTP_to_ADLS_parameters_sinkFileName": {
 						"value": "[parameters('scheduled1_properties_Ingest_raw_from_HTTP_to_ADLS_parameters_sinkFileName')]"
@@ -132,7 +152,7 @@
 				}
 			},
 			"dependsOn": [
-				"[resourceId('Microsoft.Resources/deployments', 'adf-mamo-2023_ArmTemplate_0')]"
+				"[resourceId('Microsoft.Resources/deployments', 'adf-mamo-2023_ArmTemplate_1')]"
 			]
 		}
 	]

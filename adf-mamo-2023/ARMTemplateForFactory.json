@@ -2582,6 +2582,13 @@
 								"type": "DatasetReference"
 							},
 							"name": "source1"
+						},
+						{
+							"dataset": {
+								"referenceName": "NestedJson",
+								"type": "DatasetReference"
+							},
+							"name": "source2"
 						}
 					],
 					"sinks": [
@@ -2589,7 +2596,14 @@
 							"name": "sink1"
 						}
 					],
-					"transformations": [],
+					"transformations": [
+						{
+							"name": "cast1"
+						},
+						{
+							"name": "flatten1"
+						}
+					],
 					"scriptLines": [
 						"source(output(",
 						"          raceId as short,",
@@ -2604,7 +2618,24 @@
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     ignoreNoFilesFound: false) ~> source1",
-						"source1 sink(validateSchema: false,",
+						"source(output(",
+						"          items as (id as integer, name as string)[]",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     documentForm: 'documentPerLine') ~> source2",
+						"source1 cast(output(",
+						"          date as date 'dd-MM-yyyy'",
+						"     ),",
+						"     errors: true) ~> cast1",
+						"source2 foldDown(unroll(items),",
+						"     mapColumn(",
+						"          items",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten1",
+						"cast1 sink(validateSchema: false,",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
 						"     store: 'cache',",
@@ -2615,7 +2646,8 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/races')]"
+				"[concat(variables('factoryId'), '/datasets/races')]",
+				"[concat(variables('factoryId'), '/datasets/NestedJson')]"
 			]
 		},
 		{
@@ -2749,6 +2781,49 @@
 					}
 				},
 				"schema": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/DataLakeStorage_sakimo2024')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/NestedJson')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DataLakeStorage_sakimo2024",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "nested JSON 2.json",
+						"folderPath": "1.raw_files",
+						"fileSystem": "covid-adf-course"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"items": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer"
+									},
+									"name": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/DataLakeStorage_sakimo2024')]"
