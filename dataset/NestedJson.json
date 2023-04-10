@@ -15,6 +15,24 @@
 				"fileSystem": "covid-adf-course"
 			}
 		},
-		"schema": {}
+		"schema": {
+			"type": "object",
+			"properties": {
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "integer"
+							},
+							"name": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }

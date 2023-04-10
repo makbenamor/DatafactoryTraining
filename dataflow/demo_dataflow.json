@@ -27,6 +27,9 @@
 			"transformations": [
 				{
 					"name": "cast1"
+				},
+				{
+					"name": "flatten1"
 				}
 			],
 			"scriptLines": [
@@ -43,7 +46,10 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source1",
-				"source(allowSchemaDrift: true,",
+				"source(output(",
+				"          items as (id as integer, name as string)[]",
+				"     ),",
+				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     documentForm: 'documentPerLine') ~> source2",
@@ -51,6 +57,12 @@
 				"          date as date 'dd-MM-yyyy'",
 				"     ),",
 				"     errors: true) ~> cast1",
+				"source2 foldDown(unroll(items),",
+				"     mapColumn(",
+				"          items",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1",
 				"cast1 sink(validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
