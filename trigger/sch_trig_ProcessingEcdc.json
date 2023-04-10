@@ -2,7 +2,7 @@
 	"name": "sch_trig_ProcessingEcdc",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Started",
+		"runtimeState": "Stopped",
 		"pipelines": [
 			{
 				"pipelineReference": {
