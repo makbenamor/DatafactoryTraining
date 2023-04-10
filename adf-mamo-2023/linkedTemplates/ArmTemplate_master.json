@@ -47,6 +47,10 @@
 			"type": "string",
 			"defaultValue": "/cloudboxacademy/covid19/main/raw/main/ecdc_data/hospital_admissions.csv"
 		},
+		"APIPlayer_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://api.apilayer.com"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -94,6 +98,9 @@
 					},
 					"Http_Ecdc_properties_typeProperties_url": {
 						"value": "[parameters('Http_Ecdc_properties_typeProperties_url')]"
+					},
+					"APIPlayer_properties_typeProperties_url": {
+						"value": "[parameters('APIPlayer_properties_typeProperties_url')]"
 					}
 				}
 			},

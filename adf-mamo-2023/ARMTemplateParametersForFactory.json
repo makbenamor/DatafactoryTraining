@@ -34,6 +34,9 @@
 		},
 		"scheduled1_properties_Ingest_raw_from_HTTP_to_ADLS_parameters_sourceRelativeURL": {
 			"value": "/cloudboxacademy/covid19/main/raw/main/ecdc_data/hospital_admissions.csv"
+		},
+		"APIPlayer_properties_typeProperties_url": {
+			"value": "https://api.apilayer.com"
 		}
 	}
 }
