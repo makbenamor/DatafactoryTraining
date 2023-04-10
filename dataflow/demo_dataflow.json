@@ -10,34 +10,34 @@
 						"type": "DatasetReference"
 					},
 					"name": "Races"
-				},
-				{
-					"dataset": {
-						"referenceName": "NestedJson",
-						"type": "DatasetReference"
-					},
-					"name": "NestedJson"
 				}
 			],
 			"sinks": [
 				{
+					"linkedService": {
+						"referenceName": "DataLakeStorage_sakimo2024",
+						"type": "LinkedServiceReference"
+					},
 					"name": "sink1"
 				}
 			],
 			"transformations": [
 				{
-					"name": "cast1"
+					"name": "CastDate"
 				},
 				{
-					"name": "flatten1"
+					"name": "FilterRaceID"
 				},
 				{
 					"name": "alterRow1"
+				},
+				{
+					"name": "derivedColumn1"
 				}
 			],
 			"scriptLines": [
 				"source(output(",
-				"          raceId as short,",
+				"          raceId as integer,",
 				"          year as short,",
 				"          round as short,",
 				"          circuitId as short,",
@@ -49,30 +49,26 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> Races",
-				"source(output(",
-				"          items as (id as integer, name as string)[]",
-				"     ),",
-				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false,",
-				"     documentForm: 'documentPerLine') ~> NestedJson",
 				"Races cast(output(",
 				"          date as date 'dd-MM-yyyy'",
 				"     ),",
-				"     errors: true) ~> cast1",
-				"NestedJson foldDown(unroll(items),",
-				"     mapColumn(",
-				"          items",
-				"     ),",
-				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> flatten1",
-				"cast1 alterRow() ~> alterRow1",
-				"alterRow1 sink(validateSchema: false,",
+				"     errors: true) ~> CastDate",
+				"CastDate filter(raceId==1 || raceId==2 || raceId==3 ||raceId==5 ||raceId==6 ) ~> FilterRaceID",
+				"FilterRaceID alterRow(deleteIf(raceId >= 5),",
+				"     updateIf(raceId ==3)) ~> alterRow1",
+				"alterRow1 derive(raceId = raceId + 2000) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delimited',",
+				"     columnDelimiter: ',',",
+				"     escapeChar: '\\\\',",
+				"     quoteChar: '\\\"',",
+				"     columnNamesAsHeader: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     store: 'cache',",
-				"     format: 'inline',",
-				"     output: false,",
 				"     saveOrder: 1) ~> sink1"
 			]
 		}
