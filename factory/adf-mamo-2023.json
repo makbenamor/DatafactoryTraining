@@ -1,5 +1,10 @@
 {
 	"name": "adf-mamo-2023",
+	"properties": {
+		"globalConfigurations": {
+			"PipelineBillingEnabled": "false"
+		}
+	},
 	"location": "westeurope",
 	"identity": {
 		"type": "SystemAssigned",
