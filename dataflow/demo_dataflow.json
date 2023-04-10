@@ -14,10 +14,6 @@
 			],
 			"sinks": [
 				{
-					"linkedService": {
-						"referenceName": "DataLakeStorage_sakimo2024",
-						"type": "LinkedServiceReference"
-					},
 					"name": "sink1"
 				}
 			],
@@ -54,23 +50,15 @@
 				"     ),",
 				"     errors: true) ~> CastDate",
 				"CastDate filter(raceId==1 || raceId==2 || raceId==3 ||raceId==5 ||raceId==6 ) ~> FilterRaceID",
-				"FilterRaceID alterRow(deleteIf(raceId >= 5),",
-				"     updateIf(raceId ==3)) ~> alterRow1",
+				"FilterRaceID alterRow(updateIf(raceId ==3),",
+				"     deleteIf(raceId >= 5)) ~> alterRow1",
 				"alterRow1 derive(raceId = raceId + 2000) ~> derivedColumn1",
-				"derivedColumn1 sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     format: 'delimited',",
-				"     fileSystem: 'covid-adf-course',",
-				"     folderPath: '1.raw_files/population',",
-				"     columnDelimiter: ',',",
-				"     escapeChar: '\\\\',",
-				"     quoteChar: '\\\"',",
-				"     columnNamesAsHeader: false,",
-				"     umask: 0022,",
-				"     preCommands: [],",
-				"     postCommands: [],",
+				"derivedColumn1 sink(validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
+				"     store: 'cache',",
+				"     format: 'inline',",
+				"     output: true,",
 				"     saveOrder: 1) ~> sink1"
 			]
 		}
