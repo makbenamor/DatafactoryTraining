@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "demo_dataflow",
+						"referenceName": "demo_cast_filter_alter",
 						"type": "DataFlowReference"
 					},
 					"compute": {

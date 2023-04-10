@@ -1,6 +1,9 @@
 {
-	"name": "demo_dataflow",
+	"name": "demo_cast_filter_alter",
 	"properties": {
+		"folder": {
+			"name": "learn dataflow"
+		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [

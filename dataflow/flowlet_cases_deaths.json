@@ -1,0 +1,59 @@
+{
+	"name": "flowlet_cases_deaths",
+	"properties": {
+		"type": "Flowlet",
+		"typeProperties": {
+			"sources": [
+				{
+					"linkedService": {
+						"referenceName": "DataLakeStorage_sakimo2024",
+						"type": "LinkedServiceReference"
+					},
+					"name": "CasesDeaths"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "filter1"
+				},
+				{
+					"name": "surrogateKey1"
+				},
+				{
+					"name": "output1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          country as string,",
+				"          country_code as string,",
+				"          continent as string,",
+				"          population as integer,",
+				"          indicator as string,",
+				"          daily_count as short,",
+				"          date as date,",
+				"          rate_14_day as double,",
+				"          source as string",
+				"     ),",
+				"     useSchema: false,",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'delimited',",
+				"     fileSystem: 'covid-adf-course',",
+				"     folderPath: '1.raw_files/Ecdc',",
+				"     fileName: 'cases_deaths.csv',",
+				"     columnDelimiter: ',',",
+				"     escapeChar: '\\\\',",
+				"     quoteChar: '\\\"',",
+				"     columnNamesAsHeader: true) ~> CasesDeaths",
+				"CasesDeaths filter(continent=='Europe') ~> filter1",
+				"filter1 keyGenerate(output(SurrogateKey as long),",
+				"     startAt: 1L,",
+				"     stepValue: 1L) ~> surrogateKey1",
+				"surrogateKey1 output() ~> output1"
+			]
+		}
+	}
+}
