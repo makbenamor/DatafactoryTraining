@@ -21,6 +21,12 @@
 					"name": "derivedColumn1"
 				}
 			],
+			"udfLibraries": [
+				{
+					"referenceName": "library_mamor",
+					"type": "DataFlowReference"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          name as string,",
@@ -30,7 +36,8 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> employees",
-				"employees derive(reference = iif(sex=='male', 1, iif(sex=='female', 0, -1))) ~> derivedColumn1"
+				"employees derive(reference = iif(sex=='male', 1, iif(sex=='female', 0, -1)),",
+				"          functionreference = gender_values_integer(sex)) ~> derivedColumn1"
 			]
 		}
 	}
