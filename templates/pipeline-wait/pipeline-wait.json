@@ -1,0 +1,32 @@
+{
+	"name": "Daily_0300",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "No65-0300",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2020-10-07T18:00:00",
+				"timeZone": "Tokyo Standard Time",
+				"schedule": {
+					"minutes": [
+						2
+					],
+					"hours": [
+						3
+					]
+				}
+			}
+		}
+	}
+}
