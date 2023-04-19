@@ -1,0 +1,37 @@
+{
+	"name": "dataflow-user-defined-function",
+	"properties": {
+		"folder": {
+			"name": "learn dataflow"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "employees",
+						"type": "DatasetReference"
+					},
+					"name": "employees"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          name as string,",
+				"          age as string,",
+				"          sex as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> employees",
+				"employees derive(reference = iif(sex=='male', 1, iif(sex=='female', 0, -1))) ~> derivedColumn1"
+			]
+		}
+	}
+}
