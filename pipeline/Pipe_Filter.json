@@ -1,0 +1,43 @@
+{
+	"name": "Pipe_Filter",
+	"properties": {
+		"activities": [
+			{
+				"name": "Filter1",
+				"type": "Filter",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.ArrayOfIntegers",
+						"type": "Expression"
+					},
+					"condition": {
+						"value": "@greater(item(),3)",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"ArrayOfIntegers": {
+				"type": "array",
+				"defaultValue": [
+					1,
+					2,
+					3,
+					4,
+					5,
+					6,
+					7,
+					8,
+					9
+				]
+			}
+		},
+		"folder": {
+			"name": "LearnADF"
+		},
+		"annotations": []
+	}
+}
