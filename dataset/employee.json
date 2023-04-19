@@ -1,0 +1,23 @@
+{
+	"name": "employee",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakeStorage_sakimo2024",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "employee.csv",
+					"type": "Expression"
+				},
+				"folderPath": "2.processed/testing",
+				"fileSystem": "covid-adf-course"
+			}
+		},
+		"schema": {}
+	}
+}
