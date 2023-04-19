@@ -1,0 +1,12 @@
+{
+	"name": "DummyAPIHTTP",
+	"properties": {
+		"annotations": [],
+		"type": "HttpServer",
+		"typeProperties": {
+			"url": "https://dummy.restapiexample.com/",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		}
+	}
+}
