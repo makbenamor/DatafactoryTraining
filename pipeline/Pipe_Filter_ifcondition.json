@@ -19,8 +19,8 @@
 				}
 			},
 			{
-				"name": "If Condition1",
-				"type": "IfCondition",
+				"name": "ForEach1",
+				"type": "ForEach",
 				"dependsOn": [
 					{
 						"activity": "Filter1",
@@ -31,29 +31,44 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"expression": {
-						"value": "True",
+					"items": {
+						"value": "@activity('Filter1').output.value",
 						"type": "Expression"
 					},
-					"ifFalseActivities": [
+					"isSequential": true,
+					"activities": [
 						{
-							"name": "Wait-false",
-							"type": "Wait",
+							"name": "If Condition1",
+							"type": "IfCondition",
 							"dependsOn": [],
 							"userProperties": [],
 							"typeProperties": {
-								"waitTimeInSeconds": 1
-							}
-						}
-					],
-					"ifTrueActivities": [
-						{
-							"name": "Wait-True",
-							"type": "Wait",
-							"dependsOn": [],
-							"userProperties": [],
-							"typeProperties": {
-								"waitTimeInSeconds": 1
+								"expression": {
+									"value": "@equals(mod(item() , 2),0)",
+									"type": "Expression"
+								},
+								"ifFalseActivities": [
+									{
+										"name": "Wait-false",
+										"type": "Wait",
+										"dependsOn": [],
+										"userProperties": [],
+										"typeProperties": {
+											"waitTimeInSeconds": 1
+										}
+									}
+								],
+								"ifTrueActivities": [
+									{
+										"name": "Wait-True",
+										"type": "Wait",
+										"dependsOn": [],
+										"userProperties": [],
+										"typeProperties": {
+											"waitTimeInSeconds": 1
+										}
+									}
+								]
 							}
 						}
 					]
