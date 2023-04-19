@@ -15,7 +15,11 @@
 					"name": "employees"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "derivedColumn1"
@@ -37,7 +41,14 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> employees",
 				"employees derive(reference = iif(sex=='male', 1, iif(sex=='female', 0, -1)),",
-				"          functionreference = gender_values_integer(sex)) ~> derivedColumn1"
+				"          functionreference = gender_values_integer(sex)) ~> derivedColumn1",
+				"derivedColumn1 sink(validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     store: 'cache',",
+				"     format: 'inline',",
+				"     output: false,",
+				"     saveOrder: 1) ~> sink1"
 			]
 		}
 	}
