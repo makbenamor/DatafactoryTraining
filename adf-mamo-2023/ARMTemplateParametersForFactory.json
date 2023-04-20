@@ -23,11 +23,17 @@
 		"DataLakeStorage_sakimo2024_properties_typeProperties_url": {
 			"value": "https://sakimo2024.dfs.core.windows.net/"
 		},
+		"DummyAPIHTTP_properties_typeProperties_url": {
+			"value": "https://dummy.restapiexample.com/"
+		},
 		"HTTP_dynamic_lS_ECDC_properties_typeProperties_url": {
 			"value": "@{linkedService().BaseURL}"
 		},
 		"Http_Ecdc_properties_typeProperties_url": {
 			"value": "https://raw.githubusercontent.com"
+		},
+		"dummyAPI_properties_typeProperties_url": {
+			"value": "https://dummy.restapiexample.com/"
 		},
 		"weather_gov_API_properties_typeProperties_url": {
 			"value": "https://api.weather.gov"

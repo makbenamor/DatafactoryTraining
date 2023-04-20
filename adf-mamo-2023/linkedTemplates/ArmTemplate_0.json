@@ -31,6 +31,10 @@
 			"type": "string",
 			"defaultValue": "https://sakimo2024.dfs.core.windows.net/"
 		},
+		"DummyAPIHTTP_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://dummy.restapiexample.com/"
+		},
 		"HTTP_dynamic_lS_ECDC_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "@{linkedService().BaseURL}"
@@ -38,6 +42,10 @@
 		"Http_Ecdc_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://raw.githubusercontent.com"
+		},
+		"dummyAPI_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://dummy.restapiexample.com/"
 		},
 		"weather_gov_API_properties_typeProperties_url": {
 			"type": "string",
@@ -48,6 +56,162 @@
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/Pipe_Filter')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Filter1",
+						"type": "Filter",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@pipeline().parameters.ArrayOfIntegers",
+								"type": "Expression"
+							},
+							"condition": {
+								"value": "@greater(item(),3)",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"ArrayOfIntegers": {
+						"type": "array",
+						"defaultValue": [
+							1,
+							2,
+							3,
+							4,
+							5,
+							6,
+							7,
+							8,
+							9
+						]
+					}
+				},
+				"folder": {
+					"name": "LearnADF"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Pipe_Filter_ifcondition')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Filter1",
+						"type": "Filter",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@pipeline().parameters.ArrayOfIntegers",
+								"type": "Expression"
+							},
+							"condition": {
+								"value": "@greater(item(),3)",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Filter1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Filter1').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "If Condition1",
+									"type": "IfCondition",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"expression": {
+											"value": "@equals(mod(item() , 2),0)",
+											"type": "Expression"
+										},
+										"ifFalseActivities": [
+											{
+												"name": "Wait-false",
+												"type": "Wait",
+												"dependsOn": [],
+												"userProperties": [],
+												"typeProperties": {
+													"waitTimeInSeconds": 1
+												}
+											}
+										],
+										"ifTrueActivities": [
+											{
+												"name": "Wait-True",
+												"type": "Wait",
+												"dependsOn": [],
+												"userProperties": [],
+												"typeProperties": {
+													"waitTimeInSeconds": 1
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"ArrayOfIntegers": {
+						"type": "array",
+						"defaultValue": [
+							1,
+							2,
+							3,
+							4,
+							5,
+							6,
+							7,
+							8,
+							9
+						]
+					}
+				},
+				"folder": {
+					"name": "LearnADF"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/APIPlayer')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
@@ -123,6 +287,21 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/DummyAPIHTTP')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "HttpServer",
+				"typeProperties": {
+					"url": "[parameters('DummyAPIHTTP_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Anonymous"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/HTTP_dynamic_lS_ECDC')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -158,6 +337,21 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/dummyAPI')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "RestService",
+				"typeProperties": {
+					"url": "[parameters('dummyAPI_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Anonymous"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/weather_gov_API')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -170,6 +364,31 @@
 					"authenticationType": "Anonymous"
 				}
 			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/library_mamor')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "user-defined functions",
+				"type": "UDFLibrary",
+				"typeProperties": {
+					"sources": [],
+					"sinks": [],
+					"transformations": [],
+					"scriptLines": [
+						"gender_values_integer(string) as integer = iif(i1=='male', 1, iif(i1=='female', 0, -1))"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/default')]",
+			"type": "Microsoft.DataFactory/factories/managedVirtualNetworks",
+			"apiVersion": "2018-06-01",
+			"properties": {},
 			"dependsOn": []
 		},
 		{
@@ -242,6 +461,29 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/DataLakeStorage_sakimo2024')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/HTTP')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DummyAPIHTTP",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "HttpServerLocation",
+						"relativeUrl": "api/v1/employees"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/DummyAPIHTTP')]"
 			]
 		},
 		{
@@ -378,292 +620,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/DataLakeStorage_sakimo2024')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/RestResource1')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "APIPlayer",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "RestResource",
-				"typeProperties": {
-					"relativeUrl": "exchangerates_data/latest?symbols=GBP&base=EUR"
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/APIPlayer')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/WeatherAPI')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "weather_gov_API",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "RestResource",
-				"typeProperties": {
-					"relativeUrl": "points/39.7456,-97.0892"
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/weather_gov_API')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/covidDatabase')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSqlDatabase1",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "Covid_datasets"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "country",
-						"type": "varchar"
-					},
-					{
-						"name": "country_code_2_digit",
-						"type": "varchar"
-					},
-					{
-						"name": "country_code_3_digit",
-						"type": "varchar"
-					},
-					{
-						"name": "population",
-						"type": "bigint",
-						"precision": 19
-					},
-					{
-						"name": "cases_count",
-						"type": "bigint",
-						"precision": 19
-					},
-					{
-						"name": "deaths_count",
-						"type": "bigint",
-						"precision": 19
-					},
-					{
-						"name": "reported_date",
-						"type": "date"
-					},
-					{
-						"name": "source",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "covid_reporting",
-					"table": "cases_and_deaths"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ecdc_file_list_for_all_files')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "Blob_Storage_bstorageeurostat",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "Dynamic_Datasets"
-				},
-				"annotations": [],
-				"type": "Json",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "ecdc_file_list.json",
-						"container": "blob-ingest-raw"
-					}
-				},
-				"schema": {
-					"type": "object",
-					"properties": {
-						"sourceBaseURL": {
-							"type": "string"
-						},
-						"sourceRelativeURL": {
-							"type": "string"
-						},
-						"sinkFileName": {
-							"type": "string"
-						}
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/Blob_Storage_bstorageeurostat')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hospital_admissions_daily')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSqlDatabase1",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "Covid_datasets"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "country",
-						"type": "varchar"
-					},
-					{
-						"name": "country_code_2_digit",
-						"type": "varchar"
-					},
-					{
-						"name": "country_code_3_digit",
-						"type": "varchar"
-					},
-					{
-						"name": "population",
-						"type": "bigint",
-						"precision": 19
-					},
-					{
-						"name": "reported_date",
-						"type": "date"
-					},
-					{
-						"name": "hospital_occupancy_count",
-						"type": "bigint",
-						"precision": 19
-					},
-					{
-						"name": "icu_occupancy_count",
-						"type": "bigint",
-						"precision": 19
-					},
-					{
-						"name": "source",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "covid_reporting",
-					"table": "hospital_admissions_daily"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/http_cases_deaths_raw_csv')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "Http_Ecdc",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"RelativeURL": {
-						"type": "string"
-					}
-				},
-				"folder": {
-					"name": "Covid_datasets"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "HttpServerLocation",
-						"relativeUrl": {
-							"value": "@dataset().RelativeURL",
-							"type": "Expression"
-						}
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "<!DOCTYPE html>",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/Http_Ecdc')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/http_dynamic_raw_csv_copy1')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "Http_Ecdc",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"RelativeURL": {
-						"type": "string"
-					}
-				},
-				"folder": {
-					"name": "Dynamic_Datasets"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "HttpServerLocation",
-						"relativeUrl": {
-							"value": "@dataset().RelativeURL",
-							"type": "Expression"
-						}
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "<!DOCTYPE html>",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/Http_Ecdc')]"
 			]
 		}
 	]

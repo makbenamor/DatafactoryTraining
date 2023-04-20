@@ -31,6 +31,10 @@
 			"type": "string",
 			"defaultValue": "https://sakimo2024.dfs.core.windows.net/"
 		},
+		"DummyAPIHTTP_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://dummy.restapiexample.com/"
+		},
 		"HTTP_dynamic_lS_ECDC_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "@{linkedService().BaseURL}"
@@ -38,6 +42,10 @@
 		"Http_Ecdc_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://raw.githubusercontent.com"
+		},
+		"dummyAPI_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://dummy.restapiexample.com/"
 		},
 		"weather_gov_API_properties_typeProperties_url": {
 			"type": "string",
@@ -100,11 +108,17 @@
 					"DataLakeStorage_sakimo2024_properties_typeProperties_url": {
 						"value": "[parameters('DataLakeStorage_sakimo2024_properties_typeProperties_url')]"
 					},
+					"DummyAPIHTTP_properties_typeProperties_url": {
+						"value": "[parameters('DummyAPIHTTP_properties_typeProperties_url')]"
+					},
 					"HTTP_dynamic_lS_ECDC_properties_typeProperties_url": {
 						"value": "[parameters('HTTP_dynamic_lS_ECDC_properties_typeProperties_url')]"
 					},
 					"Http_Ecdc_properties_typeProperties_url": {
 						"value": "[parameters('Http_Ecdc_properties_typeProperties_url')]"
+					},
+					"dummyAPI_properties_typeProperties_url": {
+						"value": "[parameters('dummyAPI_properties_typeProperties_url')]"
 					},
 					"weather_gov_API_properties_typeProperties_url": {
 						"value": "[parameters('weather_gov_API_properties_typeProperties_url')]"
@@ -146,6 +160,26 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'adf-mamo-2023_ArmTemplate_1')]"
+			]
+		},
+		{
+			"name": "adf-mamo-2023_ArmTemplate_3",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_3.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
 					},
 					"event_trigger_1_properties_typeProperties_scope": {
 						"value": "[parameters('event_trigger_1_properties_typeProperties_scope')]"
@@ -159,7 +193,7 @@
 				}
 			},
 			"dependsOn": [
-				"[resourceId('Microsoft.Resources/deployments', 'adf-mamo-2023_ArmTemplate_1')]"
+				"[resourceId('Microsoft.Resources/deployments', 'adf-mamo-2023_ArmTemplate_2')]"
 			]
 		}
 	]
