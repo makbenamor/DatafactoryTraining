@@ -45,6 +45,11 @@
 			{
 				"name": "source",
 				"type": "varchar"
+			},
+			{
+				"name": "PrimaryKeyColumn",
+				"type": "int",
+				"precision": 10
 			}
 		],
 		"typeProperties": {
