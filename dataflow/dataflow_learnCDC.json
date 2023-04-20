@@ -1,5 +1,5 @@
 {
-	"name": "dataflow-learnCDC",
+	"name": "dataflow_learnCDC",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -14,6 +14,10 @@
 			],
 			"sinks": [
 				{
+					"dataset": {
+						"referenceName": "cases_and_deaths_cdc",
+						"type": "DatasetReference"
+					},
 					"name": "CachSink"
 				}
 			],
@@ -36,13 +40,17 @@
 				"     skipInitialLoad: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> source1",
-				"source1 sink(validateSchema: false,",
+				"source1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:true,",
+				"     insertable:true,",
+				"     updateable:true,",
+				"     upsertable:true,",
+				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     store: 'cache',",
-				"     format: 'inline',",
-				"     output: false,",
-				"     saveOrder: 1) ~> CachSink"
+				"     saveOrder: 1,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> CachSink"
 			]
 		}
 	}
